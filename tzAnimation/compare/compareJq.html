@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html ng-app='app'>
+<head lang="en">
+	<meta charset="UTF-8">
+	<title>jq</title>
+	<link rel="stylesheet" href="../../bower_components/bootstrap/dist/css/bootstrap.css">
+	<script src="../../bower_components/lodash/dist/lodash.js"></script>
+	<script src="../../bower_components/jquery/dist/jquery.js"></script>
+	<script src="../../bower_components/jquery-ui/jquery-ui.js"></script>
+	<script src="../../bower_components/angular/angular.js"></script>
+	<script src="../../bower_components/bootstrap/dist/js/bootstrap.js"></script>
+	<style>
+		body, html {height:100%;}
+		body {padding: 30px;}
+		.init {width: 0px; height: 50px; border:solid 0px;  background: plum;}
+		.one { width: 100px;}
+	</style>
+</head>
+<body ng-click="click()" ng-controller="ctrl">
+<div class="init"></div>
+<script>
+	var app = angular.module('app', []);
+	app.controller('ctrl', function($scope){
+		$scope.click = function() {
+			var $e = $('.init');
+			if($e.hasClass('one')) {
+				$e.removeClass('one', 400, 'linear', function() {
+					$e.animate({'border-width': 0}, 100, 'linear');
+				});
+			}
+			else {
+				$e.animate({'border-width': 4}, 100, 'linear');
+				$e.addClass('one', 400, 'linear');
+			}
+		}
+	})
+</script>
+</body>
+</html>

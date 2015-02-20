@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html ng-app='app'>
+<head lang="en">
+	<meta charset="UTF-8">
+	<title>ngRepeatTrans</title>
+	<link rel="stylesheet" href="../../bower_components/bootstrap/dist/css/bootstrap.css">
+	<script src="../../bower_components/lodash/dist/lodash.js"></script>
+	<script src="../../bower_components/jquery/dist/jquery.js"></script>
+	<!--<script src="bower_components/jquery-ui/jquery-ui.js"></script>-->
+	<script src="../../bower_components/angular/angular.js"></script>
+	<script src="../../bower_components/angular-animate/angular-animate.js"></script>
+	<script src="../../bower_components/bootstrap/dist/js/bootstrap.js"></script>
+	<style>
+		body,html { height: 100%;}
+		body {padding: 30px;}
+		.one {width: 100px; border:2px solid; padding:4px;}
+		.one.ng-enter, .one.ng-move, .one.ng-leave {transition: all 200ms linear;}
+
+		.one.ng-enter, .one.ng-move,
+		.one.ng-leave.one.ng-leave-active
+		{opacity: 0; height: 0px; border:0px solid; padding:0px;}
+
+		.one.ng-enter.one.ng-enter-active, .one.ng-move.one.ng-move-active,
+		.one.ng-leave
+		{opacity: 1; height: 32px; border:2px solid; padding:4px;}
+	</style>
+</head>
+<body ng-click="click()" ng-controller="ctrl">
+order by:
+<select ng-model="order">
+	<option>name</option>
+	<option>age</option>
+</select><br>
+filter: <input ng-model="q"><br>
+name: <input ng-model="name"> item: {name, age}<br>
+age: <input ng-model="age"> <button class="btn btn-default btn-xs" ng-click="add(name, age)">Add</button> <br><br>
+<div class="one" ng-repeat="item in items|filter:q|orderBy:order">
+	<button class="close" ng-click="remove(item)">&times;</button>
+	{{item.name + item.age}}
+</div>
+<script>
+	var app = angular.module('app', ['ngAnimate']);
+	app.controller('ctrl', function($scope){
+		$scope.items = [
+			{name: 'one', age: 3},
+			{name: 'two', age: 5},
+			{name: 'three', age: 4},
+			{name: 'four', age: 2},
+			{name: 'five', age: 7}
+		];
+		$scope.order = 'age';
+		$scope.add = function(name, age) {
+			$scope.items.push({name: name, age: parseInt(age)})
+		}
+		$scope.remove = function(item) {
+			$scope.items.splice($scope.items.indexOf(item), 1);
+		}
+	})
+</script>
+</body>
+</html>

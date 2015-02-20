@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html ng-app='app'>
+<head lang="en">
+	<meta charset="UTF-8">
+	<title>strap-3.2.0</title>
+	<link rel="stylesheet" href="bower_components/bootstrap-3.2.0/dist/css/bootstrap.css">
+	<link rel="stylesheet" href="bower_components/bootstrap-additions/dist/bootstrap-additions.css"><!--for centering modal-->
+	<link rel="stylesheet" href="bower_components/angular-motion/dist/angular-motion.css">
+	<link rel="stylesheet" href="bower_components/font-awesome/css/font-awesome.css">
+	<script src="bower_components/angular/angular.js"></script>
+	<script src="bower_components/angular-animate/angular-animate.js"></script>
+	<script src="bower_components/angular-sanitize/angular-sanitize.js"></script>
+	<script src="bower_components/angular-strap/dist/angular-strap.js"></script>
+	<script src="bower_components/angular-strap/dist/angular-strap.tpl.js"></script>
+	<script src="bower_components/angular-strap/dist/modules/dimensions.js"></script><!--for affix-->
+	<style>
+	</style>
+</head>
+<body class="container-fluid" ng-controller="ctrl">
+<button ng-click="click()">click</button><br>
+<button type="button" backdrop="static" keyboard="false" class="btn btn-lg btn-primary" data-animation="am-fade-and-scale" data-placement="center" bs-modal="modal">Click to toggle modal
+	<br>
+	<small>(using an object)</small>
+</button>
+<button type="button" class="btn btn-lg btn-primary" bs-aside="aside">Click to toggle aside
+	<br>
+	<small>(using an object)</small>
+</button>
+
+<!-- You can use a custom html template with the `data-template` attr -->
+
+<script>
+
+	var app = angular.module('app', ['ngAnimate', 'ngSanitize', 'mgcrea.ngStrap']);
+	app.controller('ctrl', function ($scope, $modal) {
+
+		$scope.title = 'tilte two';
+		$scope.content = 'content two'
+		$scope.click = function () {
+		//	$modal({title:'my title', content:'my content', show:true})
+		}
+
+		$scope.aside = {
+			"title": "Title",
+			"content": "Hello Aside<br />This is a multiline message!"
+		};
+		$scope.modal = {
+			"title": "Title",
+			"content": "Hello Modal<br />This is a multiline message!"
+		};
+
+		$scope.log = function (val) {
+			console.log(val);
+		}
+	})
+
+</script>
+</body>
+</html>

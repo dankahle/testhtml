@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html ng-app='app'>
+<head lang="en">
+	<meta charset="UTF-8">
+	<title>ngView Trans</title>
+	<link rel="stylesheet" href="../../bower_components/bootstrap/dist/css/bootstrap.css">
+	<script src="../../bower_components/lodash/dist/lodash.js"></script>
+	<script src="../../bower_components/jquery/dist/jquery.js"></script>
+	<script src="../../bower_components/angular/angular.js"></script>
+	<script src="../../bower_components/angular-route/angular-route.js"></script>
+	<script src="../../bower_components/angular-animate/angular-animate.js"></script>
+	<script src="../../bower_components/bootstrap/dist/js/bootstrap.js"></script>
+	<style>
+		body {padding: 30px;}
+		.view-container {position:relative; min-height: 100px; border:solid}
+		.view-frame.ng-enter, .view-frame.ng-leave
+		{transition: 3s; background: white; position:absolute; top:0; left:0; right:0;}
+		.view-frame.ng-enter
+		{z-index: 100;}
+		.view-frame.ng-leave
+		{z-index: 99;}
+		.view-frame.ng-enter, .view-frame.ng-leave.ng-leave-active
+		{opacity:0}
+		.view-frame.ng-enter.ng-enter-active, .view-frame.ng-leave
+		{opacity:1}
+	</style>
+</head>
+<body ng-controller="ctrl">
+<select ng-change="$location.path(view)" ng-model="view">
+	<option>/view1</option>
+	<option>/view2</option>
+</select>
+<hr>
+<div class="view-container">
+	<ng-view class="view-frame"></ng-view>
+</div>
+<script>
+	var app = angular.module('app', ['ngRoute', 'ngAnimate']);
+	app.config(function($routeProvider) {
+		$routeProvider.when('/view1', {
+			template: '<div>view one content<br>view one content<br>view one content<br></div>'
+		})
+		$routeProvider.when('/view2', {
+			template: '<div>something diff two<br>something diff two<br>something diff two<br>something diff two<br>something diff two<br>something diff two<br></div>'
+		})
+		$routeProvider.otherwise({
+			redirectTo: '/view1'
+		})
+	})
+	app.controller('ctrl', function($scope, $location){
+		$scope.$location = $location;
+		$scope.view = '/view1';
+
+
+	})
+</script>
+</body>
+</html>

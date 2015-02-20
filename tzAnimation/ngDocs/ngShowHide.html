@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html ng-app='app'>
+<head lang="en">
+	<meta charset="UTF-8">
+	<title>ngShowHide</title>
+	<link rel="stylesheet" href="../../bower_components/bootstrap/dist/css/bootstrap.css">
+	<script src="../../bower_components/lodash/dist/lodash.js"></script>
+	<script src="../../bower_components/jquery/dist/jquery.js"></script>
+	<script src="../../bower_components/jquery-ui/jquery-ui.js"></script>
+	<script src="../../bower_components/angular/angular.js"></script>
+	<script src="../../bower_components/angular-route/angular-route.js"></script>
+	<script src="../../bower_components/angular-animate/angular-animate.js"></script>
+	<script src="../../bower_components/bootstrap/dist/js/bootstrap.js"></script>
+	<style>
+		body, html {height:100%;}
+		body {padding: 30px;}
+		.animate-show {border:1px solid; max-height:42px;
+			overflow:hidden; padding: 10px; transition: 1s;}
+		.animate-show.ng-hide {opacity:0; max-height: 0px;
+			padding-top:0px; padding-bottom:0px;}
+	</style>
+</head>
+<body ng-click="click()">
+
+Click me: <input type="checkbox" ng-model="checked"><br/>
+<div>
+	Show:
+	<div class="check-element animate-show" ng-show="checked">
+		<span class="glyphicon glyphicon-thumbs-up"></span> I show up when your checkbox is checked.
+	</div>
+</div>
+<div>
+	Hide:
+	<div class="check-element animate-show" ng-hide="checked">
+		<span class="glyphicon glyphicon-thumbs-down"></span> I hide when your checkbox is checked.
+	</div>
+</div>
+<script>
+	angular.module('app', ['ngAnimate'])
+</script>
+
+</body>
+</html>

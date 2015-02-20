@@ -1,1 +1,16 @@
+.idea
+.sass-cache/
+api/
+app/
+archive/
+bower_components/
+img/
+js/
+json/
+less/
+node_modules/
+scss/
+src/
+templates/
+tmp/
 

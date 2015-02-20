@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html ng-app='app'>
+<head lang="en">
+	<meta charset="UTF-8">
+	<title>Trans/Keyframe</title>
+	<link rel="stylesheet" href="../../bower_components/bootstrap/dist/css/bootstrap.css">
+	<link rel="stylesheet" href="sidebar.css">
+	<script src="../../bower_components/lodash/dist/lodash.js"></script>
+	<script src="../../bower_components/jquery/dist/jquery.js"></script>
+	<script src="../../bower_components/jquery-ui/jquery-ui.js"></script>
+	<script src="../../bower_components/angular/angular.js"></script>
+	<script src="../../bower_components/angular-animate/angular-animate.js"></script>
+	<script src="../../bower_components/bootstrap/dist/js/bootstrap.js"></script>
+	<style>
+		body, html {height:100%;}
+		body {padding: 30px;}
+	</style>
+</head>
+<body ng-click="click()" ng-controller="ctrl">
+other shit in body
+<dk-sidebar>
+	sidebar stuff<br>
+	<form>
+		<input><br>
+		<button>Submit</button>
+	</form>
+</dk-sidebar>
+<script>
+	var app = angular.module('app', ['ngAnimate']);
+	app.directive('dkSidebar', function($animate) {
+		return {
+			restrict: 'E',
+			replace: true,
+			template: '<div class="dk-sidebar"><button class="close" ng-click="toggle()" style="outline: none">&times;</button><div ng-transclude></div></div>',
+			transclude: true,
+			scope: true,
+			link: function(scope, elem, attr, ctrl, trans) {
+				scope.log = console.log.bind(console)
+				scope.toggle = function() {
+					if(elem.hasClass('dk-sidebar-show'))
+						$animate.removeClass(elem, 'dk-sidebar-show');
+					else
+						$animate.addClass(elem, 'dk-sidebar-show');
+				}
+			}
+		}
+	})
+	app.controller('ctrl', function($scope, $animate){
+		$scope.click = function() {
+		}
+	})
+</script>
+</body>
+</html>

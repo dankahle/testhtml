@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html ng-app='app'>
+<head lang="en">
+	<meta charset="UTF-8">
+	<title>ngSwitch</title>
+	<link rel="stylesheet" href="../../bower_components/bootstrap/dist/css/bootstrap.css">
+	<script src="../../bower_components/lodash/dist/lodash.js"></script>
+	<script src="../../bower_components/jquery/dist/jquery.js"></script>
+	<script src="../../bower_components/jquery-ui/jquery-ui.js"></script>
+	<script src="../../bower_components/angular/angular.js"></script>
+	<script src="../../bower_components/angular-route/angular-route.js"></script>
+	<script src="../../bower_components/angular-animate/angular-animate.js"></script>
+	<script src="../../bower_components/bootstrap/dist/js/bootstrap.js"></script>
+	<style>
+		body, html {height:100%;}
+		body {padding: 30px;}
+		.animate-switch-container {
+			position:relative;
+			background:white;
+			border:1px solid black;
+			height:40px;
+			overflow:hidden;
+		}
+		.animate-switch {
+			padding:10px;
+		}
+		.animate-switch.ng-enter, .animate-switch.ng-leave {transition: 1s; position:absolute;}
+		.animate-switch.ng-enter, .animate-switch.ng-leave.ng-leave-active {top: -60px;}
+		.animate-switch.ng-leave, .animate-switch.ng-enter.ng-enter-active {top: 0px;}
+		 {top: -60px;}
+	</style>
+</head>
+<body ng-click="click()">
+
+<div ng-controller="ExampleController">
+	<select ng-model="selection" ng-options="item for item in items">
+	</select>
+	<tt>selection={{selection}}</tt>
+	<hr/>
+	<div class="animate-switch-container"
+		 ng-switch on="selection">
+		<div class="animate-switch" ng-switch-when="settings">Settings Div</div>
+		<div class="animate-switch" ng-switch-when="home">Home Span</div>
+		<div class="animate-switch" ng-switch-default>default</div>
+	</div>
+</div>
+
+<script>
+	angular.module('app', ['ngAnimate'])
+			.controller('ExampleController', ['$scope', function($scope) {
+				$scope.items = ['settings', 'home', 'other'];
+				$scope.selection = $scope.items[0];
+			}]);
+</script>
+
+</body>
+</html>

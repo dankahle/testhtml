@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html ng-app='app'>
+<head lang="en">
+	<meta charset="UTF-8">
+	<title>ngFormDirty</title>
+	<link rel="stylesheet" href="../../bower_components/bootstrap/dist/css/bootstrap.css">
+	<script src="../../bower_components/lodash/dist/lodash.js"></script>
+	<script src="../../bower_components/jquery/dist/jquery.js"></script>
+	<script src="../../bower_components/jquery-ui/jquery-ui.js"></script>
+	<script src="../../bower_components/angular/angular.js"></script>
+	<script src="../../bower_components/angular-route/angular-route.js"></script>
+	<script src="../../bower_components/angular-animate/angular-animate.js"></script>
+	<script src="../../bower_components/bootstrap/dist/js/bootstrap.js"></script>
+	<style>
+		body, html {height:100%;}
+		body {padding: 30px;}
+		form input {transition: .5s;}
+		form input.ng-dirty.ng-invalid,
+		form input.ng-touched.ng-invalid,
+		form.ng-submitted input.ng-invalid {background: #FFB0B2;}
+		form .msg-group>span {color: red;}
+		form .msg-group>span.ng-hide {opacity: 0;}
+		form .msg-group>span.ng-hide-remove-active {transition: 1s; opacity: 1;}
+	</style>
+</head>
+<body ng-click="click()" ng-controller="ctrl">
+
+<form name="form" novalidate>
+	name: <input name="name" ng-model="name" required ng-maxlength="3" autofocus>
+			<span class="msg-group" ng-show="form.$submitted || form.name.$touched || form.name.$dirty">
+				<span ng-show="form.name.$error.required">Required</span>
+				<span ng-show="form.name.$error.maxlength">Too long</span>
+			</span>
+	<br>
+	age: <input name="age" ng-model="age" required ng-pattern="/^\d{1,3}$/">
+			<span class="msg-group" ng-show="form.$submitted || form.age.$touched || form.age.$dirty">
+				<span ng-show="form.age.$error.required">Required</span>
+				<span ng-show="form.age.$error.pattern">Bad age</span>
+			</span>
+	<br>
+	<button type="submit">submit</button>
+</form>
+form.name.$error {{form.age.$error}}<br>
+form.age.$error {{form.age.$error}}<br>
+<script>
+	var app = angular.module('app', ['ngAnimate'])
+	app.controller('ctrl', function($scope) {
+		$scope.log = console.log.bind(console);
+
+	})
+</script>
+
+</body>
+</html>

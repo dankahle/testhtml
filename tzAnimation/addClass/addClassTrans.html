@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html ng-app='app'>
+<head lang="en">
+	<meta charset="UTF-8">
+	<title>addClassTrans</title>
+	<link rel="stylesheet" href="../../bower_components/bootstrap/dist/css/bootstrap.css">
+	<script src="../../bower_components/lodash/dist/lodash.js"></script>
+	<script src="../../bower_components/jquery/dist/jquery.js"></script>
+	<script src="../../bower_components/angular/angular.js"></script>
+	<script src="../../bower_components/angular-animate/angular-animate.js"></script>
+	<script src="../../bower_components/bootstrap/dist/js/bootstrap.js"></script>
+	<style>
+		body {padding: 30px;}
+		.menuItem {padding: 3px; margin-right:12px; border:1px solid;}
+		.menuItem:hover {background: yellow;}
+		.wrap {position:relative; overflow:hidden; width:404px;
+			height:404px; border:1px solid; margin-top: 20px;}
+		.photo {display:none;}
+		.anim {display:block}
+		.anim-add, .anim-remove {position:absolute; transition: 400ms ease-out;}
+		.anim-add {top:500px; left: 0px; display:block;}
+		.anim-remove {top:0px; left:0px; display:block;}
+		.anim-add.anim-add-active {top:0px;}
+		.anim-remove.anim-remove-active {top:-500px;}
+	</style>
+</head>
+<body ng-controller="ctrl">
+<a href="" class="menuItem" ng-mouseenter="$parent.selImg = img" ng-repeat="img in images">{{img.slice(-7)}}</a>
+selImg: {{selImg}}
+<div class="wrap">
+	<img ng-src="{{img}}" class="photo" ng-class="{anim: img == selImg}" ng-repeat="img in images">
+</div>
+
+<script>
+	var app = angular.module('app', ['ngAnimate']);
+	app.animation('.phone', function() {
+		return {
+		}
+	});
+	app.controller('ctrl', function($scope){
+		$scope.selImg = "../images/dell-streak-7.0.jpg";
+		$scope.images = [
+			"../images/dell-streak-7.0.jpg",
+			"../images/dell-streak-7.1.jpg",
+			"../images/dell-streak-7.2.jpg",
+			"../images/dell-streak-7.3.jpg",
+			"../images/dell-streak-7.4.jpg"
+		];
+		$scope.log = console.log.bind(console);
+
+	})
+</script>
+</body>
+</html>

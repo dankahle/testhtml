@@ -1,0 +1,68 @@
+
+
+/* dk-sidebar */
+/* init */
+.dk-sidebar {
+    width: 300px;
+    height: 100%;
+    position: absolute;
+    top: 0px;
+    left: -300px;
+    z-index: 100;
+    padding: 20px 5px 20px 20px;
+    background: plum;
+    /*transition: 1s;*/
+}
+.dk-sidebar button.close {background: plum; border: solid;
+    position:relative; left: 26px; width:21px; opacity:.8; /*transition: .5s*/}
+/* show */
+.dk-sidebar.dk-sidebar-show {left: 0px;}
+.dk-sidebar.dk-sidebar-show button.close {background: none; border: none; left: 0px;}
+
+
+/* transition */
+
+/*
+.dk-sidebar.dk-sidebar-show {left: 0px;}
+.dk-sidebar.dk-sidebar-show button.close {background: none; border: none; left: 0px;}
+
+.dk-sidebar.dk-sidebar-show-add-active {transition: 1s; left: 0px;}
+.dk-sidebar.dk-sidebar-show-remove-active {transition: 1s; left: -300px;}
+
+.dk-sidebar.dk-sidebar-show-add-active button.close
+{transition: 1s; background: none; border: none; left: 0px;}
+.dk-sidebar.dk-sidebar-show-remove-active button.close
+{transition: 1s; background: plum; border: solid;
+    position:relative; left: 26px; width:21px; opacity:.8}
+*/
+
+
+/* Keyframes */
+
+.dk-sidebar.dk-sidebar-show-add {-webkit-animation: dk-sidebar-slide-out 1s;}
+.dk-sidebar.dk-sidebar-show-remove {-webkit-animation: dk-sidebar-slide-in 1s;}
+
+.dk-sidebar.dk-sidebar-show-add button.close {-webkit-animation: dk-sidebar-slide-out-button 1s;}
+.dk-sidebar.dk-sidebar-show-remove button.close {-webkit-animation: dk-sidebar-slide-in-button 1s;}
+
+@-webkit-keyframes dk-sidebar-slide-out {
+    from {left: -300px;}
+    to {left: 0px;}
+}
+
+@-webkit-keyframes dk-sidebar-slide-in {
+    from {left: 0px;}
+    to {left: -300px;}
+}
+
+@-webkit-keyframes dk-sidebar-slide-out-button {
+    from {}
+    to {background: none; border: none; left: 0px;}
+}
+
+@-webkit-keyframes dk-sidebar-slide-in-button {
+    from {}
+    to {background: plum; border: solid;
+        position:relative; left: 26px; width:21px; opacity:.8;}
+}
+

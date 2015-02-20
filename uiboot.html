@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html ng-app='app'>
+<head lang="en">
+	<meta charset="UTF-8">
+	<title>uiboot</title>
+	<link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.css">
+	<script src="bower_components/lodash/dist/lodash.min.js"></script>
+	<script src="bower_components/jquery/dist/jquery.min.js"></script>
+	<script src="bower_components/angular/angular.js"></script>
+	<script src="bower_components/ui-bootstrap/ui-bootstrap-tpls.js"></script>
+	<style>
+	</style>
+</head>
+<body class="container-fluid" ng-controller="ctrl">
+
+<button ng-click="log(user)">click</button><br>
+
+
+
+
+<h4>Popup</h4>
+<div class="row">
+	<div class="col-md-6">
+		<p class="input-group">
+			<input type="text" class="form-control" datepicker-popup="MM/dd/yyyy" ng-model="user.bday1"
+				   is-open="opened" min-date="minDate" max-date="'2015-06-22'"
+				   date-disabled="disabled(date, mode)" ng-required="true" close-text="Close" />
+              <span class="input-group-btn">
+                <button type="button" class="btn btn-default" ng-click="open($event)"><i class="glyphicon glyphicon-calendar"></i></button>
+              </span>
+		</p>
+	</div>
+</div>
+<div class="row">
+	<div class="col-md-6">
+		<p class="input-group">
+			<input type="text" class="form-control" datepicker-popup="MM/dd/yyyy" ng-model="user.bday2"
+				   is-open="opened" min-date="minDate" max-date="'2015-06-22'"
+				   date-disabled="disabled(date, mode)" ng-required="true" close-text="Close" />
+              <span class="input-group-btn">
+                <button type="button" class="btn btn-default" ng-click="open($event)"><i class="glyphicon glyphicon-calendar"></i></button>
+              </span>
+		</p>
+	</div>
+</div>
+
+<script>
+
+	var app = angular.module('app', ['ui.bootstrap']);
+
+
+	app.controller('ctrl', function ($scope, $modal) {
+
+		$scope.open = function($event) {
+			$event.preventDefault();
+			$event.stopPropagation();
+
+			$scope.opened = true;
+		};
+
+		var user = $scope.user = {
+			name: 'dank',
+			age: 50,
+			street: 'lovell',
+			city: 'ptown'
+		}
+
+
+		$scope.log = console.log.bind(console)
+
+	})
+
+</script>
+</body>
+</html>

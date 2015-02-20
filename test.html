@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html ng-app='app'>
+<head lang="en">
+	<meta charset="UTF-8">
+	<title>jqui</title>
+	<link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.css">
+	<script src="bower_components/lodash/dist/lodash.js"></script>
+	<script src="bower_components/jquery/dist/jquery.js"></script>
+	<script src="bower_components/angular/angular.js"></script>
+	<script src="bower_components/bootstrap/dist/js/bootstrap.js"></script>
+	<script src="less/main.css"></script>
+	<style>
+		body, html {height:100%;}
+		body {padding: 30px;}
+	</style>
+</head>
+<body ng-click="click()" ng-controller="ctrl">
+<div class="one">
+
+<div class="init"></div>
+<script>
+	var app = angular.module('app', []);
+	app.controller('ctrl', function($scope){
+		$scope.click = function() {
+			var $e = $('.init');
+			$e.toggleClass('one')
+			//$('.init').animate({left: 0}, 1000);
+		}
+	})
+</script>
+</body>
+</html>
