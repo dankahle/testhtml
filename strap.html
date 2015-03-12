@@ -14,36 +14,34 @@
 	<script src="bower_components/angular-strap/dist/angular-strap.tpl.js"></script>
 	<script src="bower_components/angular-strap/dist/modules/dimensions.js"></script><!--for affix-->
 	<style>
-		@import url(http://fonts.googleapis.com/css?family=PT+Sans:400,700,400italic,700italic);
-
+		body {padding: 50px !important;}
 	</style>
 </head>
 <body class="container-fluid" ng-controller="ctrl">
 
-<button type="button" id="popover-as-service" class="btn btn-lg btn-primary" title="{{popover.title}}" ng-click="togglePopover()">Click to toggle popover
-	<br />
-	<small>(using $popover service)</small>
+<button data-html="true" type="button" class="btn btn-lg btn-primary" data-placement="bottom" data-animation="am-flip-x" bs-popover="popover">Click to toggle popover
+	<br>
+	<small>(using an object)</small>
 </button>
-</div>
+
+	<span data-html="true" data-placement="bottom-left" data-type="info"
+		   data-animation="am-fade-and-scale" bs-tooltip="tooltip">
+		 Check me to enable my tooltip
+	</span>
+
 
 <script>
 	var app = angular.module('app', ['ngAnimate', 'ngSanitize', 'mgcrea.ngStrap']);
 	app.controller('ctrl', function ($scope, $popover) {
 
+		$scope.val = 'one<br>two';
 
-
-		$scope.popover = {title: 'Title', content: 'Hello Popover<br />This is a multiline message!'};
-
-		var asAServiceOptions = {
-			title: $scope.popover.title,
-			content: $scope.popover.content,
-			trigger: 'manual'
-		}
-
-		var myPopover = $popover(angular.element(document.querySelector('#popover-as-service')), $scope.popover);
-
-		$scope.togglePopover = function() {
-			myPopover.$promise.then(myPopover.toggle);
+		$scope.popover = {
+			"title": "Title<br>next",
+			"content": "Hello Popover<br />This is a multiline message!"
+		};		$scope.tooltip = {
+			"title": "hello<br>world",
+			"checked": false
 		};
 
 		$scope.log = function (val) {
