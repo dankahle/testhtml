@@ -10,8 +10,8 @@ module.exports = function(config) {
 
     // frameworks to use
     // available frameworks: https://npmjs.org/browse/keyword/karma-adapter
-	  frameworks: ['jasmine'],
-	  //frameworks: ['mocha', 'chai', 'sinon'],
+	  //frameworks: ['jasmine'],
+	  frameworks: ['mocha', 'chai', 'sinon'],
 
 
     // list of files / patterns to load in the browser
@@ -22,8 +22,8 @@ module.exports = function(config) {
 	    'bower_components/angular-mocks/angular-mocks.js',
 	    'bower_components/jasmine-jquery/lib/jasmine-jquery.js',
 	    'bower_components/jquery-ui/jquery-ui.js',
-	    //'node_modules/chai-as-promised/lib/chai-as-promised.js',
-	    //'node_modules/sinon-chai/lib/sinon-chai.js',
+	    'node_modules/chai-as-promised/lib/chai-as-promised.js',
+	    'node_modules/sinon-chai/lib/sinon-chai.js',
 	    'app/**/*.js',
 	    'app/**/*_spec.js',
     ],

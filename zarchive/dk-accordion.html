@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html ng-app='app'>
+<head lang="en">
+	<meta charset="UTF-8">
+	<title>test</title>
+	<link rel="stylesheet" href="../bower_components/bootstrap/dist/css/bootstrap.css">
+	<script src="../bower_components/lodash/dist/lodash.js"></script>
+	<script src="../bower_components/jquery/dist/jquery.js"></script>
+	<script src="../bower_components/angular/angular.js"></script>
+	<script src="../bower_components/angular-sanitize/angular-sanitize.js"></script>
+	<script src="../bower_components/bootstrap/dist/js/bootstrap.js"></script>
+	<style>
+		body, html {height:100%;}
+		body {padding: 30px;}
+	</style>
+</head>
+<body ng-click="click()" ng-controller="ctrl">
+
+<dk-accordion panels="ppanels" id="myAccordion"></dk-accordion>
+
+<script type="text/ng-template" id="dk-accordion.html">
+	<div class="panel-group" role="tablist" aria-multiselectable="true">
+		<div ng-repeat="panel in panels" class="panel panel-default">
+			<div class="panel-heading" role="tab" id="{{id}}_heading_{{$index}}">
+				<h4 class="panel-title">
+					<a ng-bind-html="panel.heading" ng-class="{collapsed: $index != 0}" data-toggle="collapse" data-parent="#{{id}}" href="#{{id}}_collapse_{{$index}}" aria-expanded="true" aria-controls="collapseOne">
+					</a>
+				</h4>
+			</div>
+			<div id="{{id}}_collapse_{{$index}}" ng-class="{in: $index == 0}" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">
+				<div ng-bind-html="panel.body" class="panel-body">
+				</div>
+			</div>
+		</div>
+	</div>
+</script>
+<script>
+	var app = angular.module('app', ['ngSanitize']);
+
+	app.directive('dkAccordion', function() {
+		return {
+			restrict: 'E',
+			replace: true,
+			scope: {
+				id: '@',
+				panels: '='
+			},
+			templateUrl: 'dk-accordion.html',
+			link: function(scope, elem, attr) {
+			}
+		}
+	})
+
+	app.controller('ctrl', function($scope){
+
+		$scope.ppanels = [
+			{
+				heading: 'heading <b>number</b> one',
+				body: 'multi line<br> text one'
+			},
+			{
+				heading: 'heading <b>number</b> two',
+				body: 'multi line<br> text two'
+			},
+			{
+				heading: 'heading <b>number</b> three',
+				body: 'multi line<br> text three'
+			}
+		]
+	})
+</script>
+</body>
+</html>

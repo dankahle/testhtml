@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+	<meta charset="UTF-8">
+	<title>jquery</title>
+	<link rel="stylesheet" href="../../bower_components/bootstrap/dist/css/bootstrap.css">
+	<script src="../../bower_components/jquery/dist/jquery.min.js"></script>
+	<script src="../../bower_components/angular/angular.js"></script>
+	<script src="../../bower_components/bootstrap/dist/js/bootstrap.js"></script>
+	<style>
+		body {padding: 20px;}
+		[role=tabpanel] .tab-content div {
+			border-left: 1px solid #eee;
+			border-right: 1px solid #eee;
+			border-bottom: 1px solid #eee;
+		}
+	</style>
+</head>
+<body>
+span: <span id="spn"></span>
+
+<div id="myTab" role="tabpanel">
+
+	<!-- Nav tabs -->
+	<ul class="nav nav-tabs" role="tablist">
+		<li role="presentation" class="active"><a href="#home" aria-controls="home" role="tab" data-toggle="tab">Home</a></li>
+		<li role="presentation"><a href="#profile" aria-controls="profile" role="tab" data-toggle="tab" >Profile</a></li>
+		<li role="presentation"><a href="#messages" aria-controls="messages" role="tab" data-toggle="tab" >Messages</a></li>
+		<li role="presentation"><a href="#settings" aria-controls="settings" role="tab" data-toggle="tab" >Settings</a></li>
+	</ul>
+
+	<!-- Tab panes -->
+	<div class="tab-content">
+		<div role="tabpanel" class="tab-pane active fade in" id="home">home<br>home<br>home<br>home<br>home<br></div>
+		<div role="tabpanel" class="tab-pane " id="profile">profile</div>
+		<div role="tabpanel" class="tab-pane " id="messages">messages</div>
+		<div role="tabpanel" class="tab-pane " id="settings">settings</div>
+	</div>
+
+</div>
+
+
+
+<script>
+	$(function(){
+
+		$('#myTab a').on('shown.bs.tab', function (e) {
+			console.log(e.target)
+			$('#spn').text($(e.target).text());
+		})
+
+	})
+
+</script>
+</body>
+</html>

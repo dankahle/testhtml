@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html ng-app='app'>
+<head lang="en">
+	<meta charset="UTF-8">
+	<title>ng</title>
+	<script src="bower_components/lodash/dist/lodash.js"></script>
+	<script src="bower_components/jquery/dist/jquery.js"></script>
+	<script src="bower_components/angular/angular.js"></script>
+	<script src="bower_components/angular-animate/angular-animate.js"></script>
+	<script src="bower_components/angular-route/angular-route.js"></script>
+	<script src="bower_components/angular-sanitize/angular-sanitize.js"></script>
+	<script src="bower_components/angular-touch/angular-touch.js"></script>
+	<script src="bower_components/angular-messages/angular-messages.js"></script>
+	<style>
+		body { padding: 30px; }
+		.dropHighlight { border-color: red !important; }
+	</style>
+</head>
+<body ng-controller="ctrl">
+<div drop style="width:300px; height:100px; float:right; border:solid;"></div>
+<div class="dropSource" draggable="true">jquery</div>
+
+<div drag payload="angular payload">angular</div>
+<img id="dragSrc" src="images/dell-streak-7.0.jpg" width="100" drag payload="image payload"><br>
+
+<img id="dragImg" src="images/chair.jpg" style="opacity:.5; width:100px;position:fixed; left: 1000px;">
+<script>
+
+	var app = angular.module('app', ['ngAnimate', 'ngRoute', 'ngSanitize', 'ngTouch', 'ngMessages']);
+	app.directive('drag', function () {
+		return function (scope, elem, attr) {
+			elem.attr('draggable', 'true')
+			elem.on('dragstart', function (e) {
+				var dt = event.dataTransfer;
+				dt.clearData()// need to do this to clear out image, html types browser puts in
+				var obj = {name: 'dank', age: 50}
+				// this doens't work (lpldata), it calls toString on the object
+				// and all you get is '[object Object]' in the drop event
+				dt.setData('lpldata', obj)
+				dt.setData('application/json', JSON.stringify(obj))
+				dt.setData('text/plain', attr.payload)
+				dt.effectAllowed = 'copyMove'
+				dt.setDragImage($('#dragImg')[0], 50, 40)
+			});
+			elem.on('drag', function() {
+				// this is like mousemove, a million hits with x,y coords I suppose
+			})
+			elem.on('dragend', function() {
+				console.log('stop source animation')
+			})
+		}
+	})
+	app.directive('drop', function () {
+		return function (scope, elem, attr) {
+			elem.on('dragenter dragover', function() {
+				elem.addClass('dropHighlight')
+				var dt = event.dataTransfer;
+				if(/move/i.test(dt.effectAllowed))
+					dt.dropEffect = 'move';
+				else if(/copy/i.test(dt.effectAllowed))
+					dt.dropEffect = 'copy';
+				else
+					return; // no preventDefault, then no drop
+				event.preventDefault()
+			})
+			elem.on('dragleave', function() {
+				elem.removeClass('dropHighlight')
+			})
+			elem.on('drop', function (e) {
+				var dt = event.dataTransfer;
+				var availableTypes = dt.types;
+				console.log('available', availableTypes)
+				// order these as most important to least important
+				var supportedTypes = ["application/json", "lpldata", "text/plain"];
+				var types = supportedTypes.filter(function (value) {
+					return  _.contains(availableTypes, value)
+				});
+				if (types.length) {
+					var type = types[0];
+					var data = dt.getData(type);
+
+					switch(type) {
+						// this doesn't work, just calls toString on the object
+						  // all you get is: '[object Object]'
+						case 'lpldata':
+						  text = data.name + data.age;
+						  break;
+						case 'application/json':
+							var obj = JSON.parse(data)
+							text = obj.name + obj.age;
+						  break;
+						case 'text/plain':
+						  text = data;
+						  break
+					}
+
+					event.target.textContent = text;
+				}
+				elem.removeClass('dropHighlight')
+				event.preventDefault();
+			})
+		}
+	})
+	app.controller('ctrl', function ($scope, $http) {
+
+
+
+	})
+</script>
+</body>
+</html>

@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html ng-app='app'>
+<head lang="en">
+	<meta charset="UTF-8">
+	<title>angular</title>
+	<link rel="stylesheet" href="../../bower_components/bootstrap/dist/css/bootstrap.css">
+	<script src="../../bower_components/lodash/dist/lodash.min.js"></script>
+	<script src="../../bower_components/jquery/dist/jquery.min.js"></script>
+	<script src="../../bower_components/angular/angular.js"></script>
+	<script src="../../bower_components/bootstrap/dist/js/bootstrap.js"></script>
+
+	<style>
+		body {padding: 20px;}
+		[role=tabpanel] .tab-content div {
+			border-left: 1px solid #eee;
+			border-right: 1px solid #eee;
+			border-bottom: 1px solid #eee;
+		}
+	</style>
+</head>
+<body ng-controller="ctrl">
+current tab: <span id="spn">{{spval}}</span><br><br>
+
+<div id="myTab" role="tabpanel">
+	<!-- Nav tabs -->
+	<ul class="nav nav-tabs" role="tablist">
+		<li ng-repeat="tab in tabs" ng-class="{active: tab.active}"><a href="#{{tab.name}}" role="tab" data-toggle="tab" ng-click="myclick(tab)">{{tab.name}}</a></li>
+	</ul>
+	<!-- Tab panes -->
+	<div class="tab-content">
+		<div ng-repeat="tab in tabs" class="tab-pane" ng-class="{active: $first}" id="{{tab.name}}">{{tab.body}}</div>
+	</div>
+</div>
+
+
+<script>
+	var app = angular.module('app', []);
+	app.controller('ctrl', function($scope){
+		$scope.name = 'dank';
+		$scope.tabs = [
+			{name: 'home', value: 'homeval', body: "homeb"},
+			{name: 'profile', value: 'profile val', body: "profileb"},
+			{name: 'messages', value: 'mgsg val',  body: "message b", active: true},
+			{name: 'settings', value: 'settubgs val', body: "settings b"}
+		]
+		$scope.spval = _.find($scope.tabs, 'active').name;
+
+		$scope.myclick = function(data){
+			this.$parent.spval = data.name;
+		}
+
+	})
+
+
+
+</script>
+</body>
+</html>

@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html ng-app='app'>
+<head lang="en">
+	<meta charset="UTF-8">
+	<title>uibootstrap</title>
+	<link rel="stylesheet" href="../../bower_components/bootstrap/dist/css/bootstrap.css">
+	<script src="../../bower_components/lodash/dist/lodash.min.js"></script>
+	<script src="../../bower_components/angular/angular.js"></script>
+	<script src="../../bower_components/angular-bootstrap/ui-bootstrap-tpls.js"></script>
+
+	<style>
+		body {padding: 20px;}
+		[role=tabpanel] .tab-content div {
+			border-left: 1px solid #eee;
+			border-right: 1px solid #eee;
+			border-bottom: 1px solid #eee;
+		}
+	</style>
+</head>
+<body ng-controller="ctrl">
+current tab: <span id="spn">{{spval}}</span><br><br>
+
+<tabset>
+	<tab ng-repeat="tab in tabs" heading="{{tab.name}}" active="tab.active" ng-click="myclick(tab)">{{tab.body}}</tab>
+</tabset>
+
+
+<script>
+	var app = angular.module('app', ['ui.bootstrap']);
+	app.controller('ctrl', function($scope){
+		$scope.name = 'dank';
+		$scope.tabs = [
+			{name: 'home', value: 'homeval', body: "homeb"},
+			{name: 'profile', value: 'profile val', body: "profileb", active: true},
+			{name: 'messages', value: 'mgsg val',  body: "message b"},
+			{name: 'settings', value: 'settubgs val', body: "settings b"}
+		]
+		$scope.spval = _.find($scope.tabs, 'active').name;
+
+		$scope.myclick = function(data){
+			$scope.spval = data.name;
+		}
+
+	})
+
+
+
+</script>
+</body>
+</html>
