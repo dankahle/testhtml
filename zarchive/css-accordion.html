@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html ng-app='app'>
+<head lang="en">
+	<meta charset="UTF-8">
+	<title>test</title>
+	<link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.min.css">
+	<script src="bower_components/lodash/dist/lodash.js"></script>
+	<script src="bower_components/jquery/dist/jquery.js"></script>
+	<script src="bower_components/angular/angular.js"></script>
+	<script src="bower_components/angular-route/angular-route.js"></script>
+	<style>
+		body { padding: 30px; }
+
+		div { border: solid gray; }
+		div.head { background: plum }
+		div.body { height: 0px; opacity: 0; transition: height 400ms, opacity 400ms; overflow: hidden;}
+		div.body:target { height: 80px; opacity: 1  }
+	</style>
+</head>
+<body ng-controller="ctrl">
+	<a href="#one"><div class="head topper"><h3>One header</h3></div></a>
+	<div class="body" id="one">
+		Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer nec odio. Praesent libero. Sed cursus ante dapibus diam. Sed nisi. Nulla quis sem at nibh elementum imperdiet. Duis sagittis ipsum. Praesent mauris. Fusce nec tellus sed augue semper porta. Mauris massa. Vestibulum lacinia arcu eget nulla. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos.
+	</div>
+	<a href="#two"><div class="head"><h3>Two header</h3></div></a>
+	<div class="body" id="two">
+		Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer nec odio. Praesent libero. Sed cursus ante dapibus diam. Sed nisi. Nulla quis sem at nibh elementum imperdiet. Duis sagittis ipsum. Praesent mauris. Fusce nec tellus sed augue semper porta. Mauris massa. Vestibulum lacinia arcu eget nulla. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos.
+	</div>
+	<a href="#three"><div class="head"><h3>Three header</h3></div></a>
+	<div class="body" id="three">
+		Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer nec odio. Praesent libero. Sed cursus ante dapibus diam. Sed nisi. Nulla quis sem at nibh elementum imperdiet. Duis sagittis ipsum. Praesent mauris. Fusce nec tellus sed augue semper porta. Mauris massa. Vestibulum lacinia arcu eget nulla. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos.
+	</div>
+<script>
+
+
+	var app = angular.module('app', ['ngRoute']);
+	app.config(function($routeProvider) {
+		$routeProvider.html5Mode(true)
+	})
+	app.controller('ctrl', function ($scope, $location) {
+
+
+	})
+</script>
+</body>
+</html>

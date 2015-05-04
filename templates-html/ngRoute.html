@@ -2,7 +2,8 @@
 <html ng-app='app'>
 <head lang="en">
 	<meta charset="UTF-8">
-	<title>ngBoot</title>
+	<!--<meta name="viewport" content="width=device-width, initial-scale=1.0" />-->
+	<title>angBootRoute</title>
 	<link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.css">
 	<script src="bower_components/lodash/dist/lodash.js"></script>
 	<script src="bower_components/jquery/dist/jquery.js"></script>
@@ -18,11 +19,29 @@
 	</style>
 </head>
 <body ng-controller="ctrl">
+<select ng-change="$location.path(view)" ng-model="view">
+	<option>/view1</option>
+	<option>/view2</option>
+</select>
+<hr>
+<ng-view class="view-frame"></ng-view>
 
 <script>
 	var app = angular.module('app', ['ngAnimate', 'ngRoute', 'ngSanitize', 'ngTouch', 'ngMessages']);
+	app.config(function($routeProvider) {
+		$routeProvider.when('/view1', {
+			template: '<div>view one content<br>view one content<br>view one content<br></div>'
+		})
+		$routeProvider.when('/view2', {
+			template: '<div>something diff two<br>something diff two<br>something diff two<br></div>'
+		})
+		$routeProvider.otherwise({
+			redirectTo: '/view1'
+		})
+	})
 	app.controller('ctrl', function($scope, $location){
-
+		$scope.$location = $location;
+		$scope.view = '/view1';
 
 	})
 </script>
