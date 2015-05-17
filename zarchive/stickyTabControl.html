@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html ng-app='app'>
+<head lang="en">
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+	<!--<script src="bower_components/modernizr/modernizr.js"></script>-->
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+	<title>test</title>
+	<link rel="stylesheet" href="bower_components/bootstrap/less/bootstrap.css">
+	<link rel="stylesheet" href="bower_components/font-awesome/css/font-awesome.css">
+	<link rel="stylesheet" href="less/main.css">
+	<script src="bower_components/lodash/dist/lodash.js"></script>
+	<script src="bower_components/jquery/dist/jquery.js"></script>
+	<script src="bower_components/bootstrap/dist/js/bootstrap.js"></script>
+	<script src="bower_components/angular/angular.js"></script>
+	<script src="bower_components/angular-ui-router/release/angular-ui-router.js"></script>
+	<script src="bower_components/ui-router-extras/release/ct-ui-router-extras.js"></script>
+</head>
+<body ng-controller="ctrl" class="container-fluid">
+
+<ul id="myTab" class="nav nav-tabs" role="tablist">
+	<li role="presentation">
+		<a ui-sref="home" data-target="#home" data-toggle="tab">Home</a>
+	</li>
+	<li role="presentation">
+		<a ui-sref="profile" data-target="#profile" data-toggle="tab">Profile</a>
+	</li>
+	<li role="presentation">
+		<a ui-sref="contacts" data-target="#contacts" data-toggle="tab">Contacts</a>
+	</li>
+</ul>
+
+<div id="myTabContent" class="tab-content">
+	<div role="tabpanel" class="tab-pane fade" id="home">
+		<div ui-view="home"></div>
+	</div>
+	<div role="tabpanel" class="tab-pane fade" id="profile">
+		<div ui-view="profile"></div>
+	</div>
+	<div role="tabpanel" class="tab-pane fade" id="contacts">
+		<div ui-view="contacts"></div>
+	</div>
+</div>
+
+<script>
+	var init = true;
+	function getCtrl() {
+		return function ($scope, $state) {
+			var states = ['home', 'profile', 'contacts'];
+			if(init) {
+				init = false;
+				var index = 0; // home if not found
+				states.forEach(function(v,i) {
+					if($state.current.name.indexOf(v) == 0)
+						index = i;
+				})
+				$('#myTab > li:eq(' + index + ') a').tab('show')
+			}
+			console.log('controller', $state.current.name)
+			$scope.name = $state.current.name;
+			var start = Date.now();
+			$scope.time = 0;
+			setInterval(function () {
+				$scope.time = Math.floor((Date.now() - start) / 1000);
+				$scope.$digest();
+			}, 1000)
+		}
+	}
+	var template = "{{name}} = {{time}}s";
+
+	var app = angular.module('app', ['ui.router', 'ct.ui.router.extras.sticky', 'ct.ui.router.extras.dsr']);
+
+	app.run(function ($rootScope, $state, $stateParams) {
+		function handler(event, toState, toParams, fromState, fromParams, error) {
+			if (error)
+				console.error(error)
+			else
+				console.log('%s: from %s to %s', event.name, fromState.name, toState.name)
+		}
+
+//		$rootScope.$on('$stateChangeStart', handler)
+//		$rootScope.$on('$stateChangeSuccess', handler)
+//		$rootScope.$on('$stateNotFound', handler)
+		$rootScope.$on('$stateChangeError', handler)
+
+		$rootScope.$state = $state;
+		$rootScope.$stateParams = $stateParams;
+
+	})
+	app.config(function ($stateProvider, $urlRouterProvider, $stickyStateProvider, $locationProvider) {
+		// $stickyStateProvider.enableDebug(true);
+
+		// For any unmatched url, redirect to /state1
+		$urlRouterProvider.otherwise("/home");
+		//
+		// Now set up the states
+		$stateProvider
+			.state('home', {
+				deepStateRedirect: true,
+				sticky: true,
+				url: '/home',
+				views: {
+					home: {
+						controller: getCtrl(),
+						template: template
+					}
+				}
+			})
+			.state('profile', {
+				deepStateRedirect: true,
+				sticky: true,
+				url: '/profile',
+				views: {
+					profile: {
+						controller: getCtrl(),
+						template: template + '<br><a ui-sref="profile.addr">Address</a> <ui-view></ui-view>'
+					}
+				}
+			})
+			.state('profile.addr', {
+				deepStateRedirect: true,
+				sticky: true,
+				url: '/addr',
+				controller: getCtrl(),
+				template: '<fieldset><legend>Address</legend>' +
+				'street: lovell</fieldset>'
+	})
+		.state('contacts', {
+			deepStateRedirect: true,
+			sticky: true,
+			url: '/contacts',
+			views: {
+				contacts: {
+					controller: getCtrl(),
+					template: template
+				}
+			}
+		})
+
+	})
+	app.controller('ctrl', function ($scope, $location) {
+	})
+</script>
+</body>
+</html>

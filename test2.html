@@ -1,21 +1,49 @@
 <!DOCTYPE html>
 <html ng-app='app'>
 <head lang="en">
+	<title>test2</title>
 	<meta charset="UTF-8">
-	<!--<meta name="viewport" content="width=device-width, initial-scale=1.0" />-->
-	<title>ng</title>
+	<meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+
+	<!--<script src="bower_components/modernizr/modernizr.js"></script>-->
+	<!--<base href="https://developer.mozilla.org/samples/cssref/">-->
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+	<title>test</title>
+	<link rel="stylesheet" href="bower_components/bootstrap/less/bootstrap.css">
+	<link rel="stylesheet" href="bower_components/font-awesome/css/font-awesome.css">
+	<link rel="stylesheet" href="less/main.css">
 	<script src="bower_components/lodash/dist/lodash.js"></script>
 	<script src="bower_components/jquery/dist/jquery.js"></script>
+	<script src="bower_components/bootstrap/dist/js/bootstrap.js"></script>
 	<script src="bower_components/angular/angular.js"></script>
+
+	<script>
+	</script>
 	<style>
-		body {padding:30px;}
+		/*body {margin:0px; padding:100px; }*/
+		.box { width: 100px; height: 100px; border: thin solid; float: left; }
+
+		.border { border: thin solid; }
+
+
 	</style>
 </head>
-<body ng-controller="ctrl">
+<body ng-controller="ctrl" class="container-fluid">
+
+
 
 <script>
+function test(){}
+	function getfn() {
+		return test;
+	}
+console.log(getfn() == getfn())
+
+
+
 	var app = angular.module('app', []);
-	app.controller('ctrl', function($scope, $location){
+
+	app.controller('ctrl', function ($scope, $location) {
 
 
 	})
