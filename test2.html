@@ -11,39 +11,63 @@
 	<title>test</title>
 	<link rel="stylesheet" href="bower_components/bootstrap/less/bootstrap.css">
 	<link rel="stylesheet" href="bower_components/font-awesome/css/font-awesome.css">
-	<link rel="stylesheet" href="less/main.css">
+	<link rel="stylesheet" href="less/test2.css">
 	<script src="bower_components/lodash/dist/lodash.js"></script>
 	<script src="bower_components/jquery/dist/jquery.js"></script>
 	<script src="bower_components/bootstrap/dist/js/bootstrap.js"></script>
 	<script src="bower_components/angular/angular.js"></script>
+	<script src="bower_components/restangular/dist/restangular.js"></script>
+	<script src="bower_components/angular-ui-router/release/angular-ui-router.js"></script>
+
 
 	<script>
 	</script>
 	<style>
 		/*body {margin:0px; padding:100px; }*/
 		.box { width: 100px; height: 100px; border: thin solid; float: left; }
-
 		.border { border: thin solid; }
+		.outline { outline: thin solid; outline-offset: -1px;}
 
 
 	</style>
 </head>
 <body ng-controller="ctrl" class="container-fluid">
 
+<header class="myheader outline clearfix">
+	<span class="h3 nomargin mytitle ">Title Line</span>
+
+		<div class="myright">
+			<span style="font-size: .8em">Tata</span>
+			<span class="h4 nomargin">Dan</span>
+			<a class="myacct" href="#">Account</a>
+		</div>
+		<div class="outline mymiddle">
+			<span>Tata</span>
+		</div>
+
+		<div class="outline mymiddle-right" >
+			<span style="font-size: 18px;">18 Baby</span>
+			&nbsp;Tata</div>
+
+
+</header>
+
+
 
 
 <script>
-function test(){}
-	function getfn() {
-		return test;
-	}
-console.log(getfn() == getfn())
+	var app = angular.module('app', ['restangular', 'ui.router']);
+	app.config(function(RestangularProvider, $stateProvider, $urlRouterProvider) {
+		RestangularProvider.setBaseUrl('http://localhost:3000/api');
 
 
+	})
 
-	var app = angular.module('app', []);
+	app.controller('ctrl', function ($scope, $state, $stateParams, Restangular) {
 
-	app.controller('ctrl', function ($scope, $location) {
+		//$state.go('home');
+
+
 
 
 	})

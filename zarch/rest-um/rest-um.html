@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html ng-app='app'>
+<head lang="en">
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+	<!--<script src="bower_components/modernizr/modernizr.js"></script>-->
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+	<title>rest-um</title>
+	<link rel="stylesheet" href="../../bower_components/bootstrap/less/bootstrap.css">
+	<link rel="stylesheet" href="../../bower_components/font-awesome/css/font-awesome.css">
+	<link rel="stylesheet" href="rest-um.css">
+
+	<script src="../../bower_components/lodash/dist/lodash.js"></script>
+	<script src="../../bower_components/jquery/dist/jquery.js"></script>
+	<script src="../../bower_components/bootstrap/dist/js/bootstrap.js"></script>
+	<script src="../../bower_components/angular/angular.js"></script>
+	<script src="../../bower_components/angular-animate/angular-animate.js"></script>
+	<script src="../../bower_components/angular-ui-router/release/angular-ui-router.js"></script>
+	<script src="../../bower_components/ui-router-extras/release/ct-ui-router-extras.js"></script>
+	<script src="../../bower_components/restangular/dist/restangular.js"></script>
+	<script src="rest-um.js"></script>
+</head>
+<style>
+	.outline {outline: thin solid; outline-offset: -1px;}
+</style>
+<body ng-controller="bodyCtrl" class="container-fluid">
+
+<div class="row height-100">
+	<nav class="col-sm-4 border-right height-100 usernav">
+
+		<div class="top-header clearfix">
+			<span class="h3 title-text nomargin">Users</span>
+			<a ui-sref="add" class="h4 nomargin pull-right">
+				<span class="fa fa-plus"></span>
+				<span>add</span>
+			</a>
+		</div>
+
+		<ul class="list-unstyled">
+			<li class="animate clearfix" ng-repeat="user in users">
+				<a class="usernav-name" ui-sref="user.message({userId: user.id})">
+					<span class="h4">{{user.name}}</span></a>
+
+				<span class="usernav-links">
+					<a ui-sref="user.edit({userId: user.id})">profile</a>
+					<a href="" ng-click="removeUser(user)">del</a>
+				</span>
+
+			</li>
+		</ul>
+	</nav>
+	<section class="col-sm-8 height-100">
+		<ui-view></ui-view>
+	</section>
+</div>
+
+
+<script type="text/ng-template" id="userTemp">
+	<div class="row">
+		<div class="col-sm-6">
+			<div class="top-header">
+				<span class="h3">Profile:</span>
+			</div>
+			<form class="form-horizontal" ng-submit="submit()">
+				<div class="form-group">
+					<label for="user-name" class="col-sm-2 control-label">Name</label>
+					<div class="col-sm-10">
+						<input id="user-name" ng-model="user.name" class="form-control">
+					</div>
+				</div>
+				<div class="form-group">
+					<label for="user-age" class="col-sm-2 control-label">Age</label>
+					<div class="col-sm-10">
+						<input id="user-age" ng-model="user.age" class="form-control">
+					</div>
+				</div>
+				<div class="form-group">
+					<div class="col-sm-offset-2 col-sm-10">
+						<button type="button" class="btn btn-default" ng-click="$state.go('home')">Cancel</button>
+						<button type="submit" class="btn btn-primary" ng-show="$state.includes('**.add')">Add</button>
+						<button type="submit" class="btn btn-primary" ng-show="$state.includes('**.edit')">Update</button>
+					</div>
+				</div>
+			</form>
+		</div>
+	</div>
+</script>
+
+<script type="text/ng-template" id="messagesTemp">
+	<div class="row height-100">
+		<div class="col-sm-6 border-right height-100">
+
+			<div class="top-header cleafix">
+				<span class="h3">Messages</span>
+				<a ui-sref="user.message.add" class="pull-right">
+					<span class="h4 fa fa-plus"></span>
+					<span class="h4">add</span>
+				</a>
+			</div>
+			<ul class="list-group messages">
+				<li class="list-group-item animate" ng-repeat="msg in messages" >
+						<div>{{msg.message}}</div>
+						<a ui-sref="user.message.edit({messageId: msg.id})">edit</a>
+						<a href="" ng-click="removeMessage(msg)">del</a>
+				</li>
+			</ul>
+		</div>
+		<div class="col-sm-6">
+			<ui-view></ui-view>
+		</div>
+	</div>
+</script>
+
+<script type="text/ng-template" id="messageTemp">
+	<div class="top-header">
+		<span class="h3">{{mode}} Message</span>
+	</div>
+	<form class="message-form" ng-submit="submit()">
+		<div class="form-group">
+			<label for="message">Messages</label>
+			<textarea id="message" ng-model="message.message" class="form-control" rows="5"></textarea>
+		</div>
+		<div class="form-group">
+				<button type="button" ng-click="$state.go('^')" class="btn btn-default">Cancel</button>
+				<button type="submit" ng-show="$state.includes('**.add')" class="btn btn-primary">Add</button>
+				<button type="submit" ng-show="$state.includes('**.edit')" class="btn btn-primary">Update</button>
+		</div>
+	</form>
+</script>
+
+
+</body>
+</html>
