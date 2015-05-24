@@ -24,16 +24,7 @@
 			console.log('>> ' + to.name);
 		})
 	})
-	app.config(function(RestangularProvider, $stateProvider, $urlRouterProvider, $urlPaths, $httpProvider) {
-
-		$httpProvider.interceptors.push(function($q) {
-			return {
-				'responseError': function(rejection) {
-					console.log('$http intercepted error:', rejection);
-					return $q.reject(rejection);
-				}
-			};
-		});
+	app.config(function(RestangularProvider, $stateProvider, $urlRouterProvider, $urlPaths) {
 
 		RestangularProvider.setBaseUrl($urlPaths.api);
 
@@ -75,8 +66,8 @@
 			.state('user.message.edit', {
 				url: '/{messageId:int}/edit',
 				resolve: {
-					message: function(user, $stateParams, $users) {
-						return $users.getOneMessage(user.id, $stateParams.messageId);
+					message: function(user, $stateParams) {
+						return user.one('messages', $stateParams.messageId).get();
 					}
 				},
 				controller: 'messageEditCtrl',
@@ -115,12 +106,12 @@
 				});
 
 
-	//				$scope.users = users;
+//				$scope.users = users;
 			})
 		};
 
 		$scope.removeUser = function(user) {
-			$users.remove(user.id).then(function() {
+			$users.remove(user).then(function() {
 				refreshUsers();
 			})
 		}
@@ -151,13 +142,13 @@
 	app.controller('messagesCtrl', function($scope, user, $users) {
 
 		$scope.refreshMessages = refreshMessages = function() {
-			$users.getAllMessages(user.id).then(function(messages) {
+			user.getList('messages').then(function(messages) {
 				$scope.messages = messages.reverse();
 			})
 		}
 
 		$scope.removeMessage = function(message) {
-			$users.removeMessage(user.id, message.id).then(function() {
+			$users.removeMessage(message).then(function() {
 				_.remove($scope.messages, message);
 			})
 		}
@@ -168,26 +159,19 @@
 	app.controller('messageAddCtrl', function($scope, user, $users) {
 		$scope.mode = 'Add';
 		$scope.submit = function() {
-			$users.addMessage(user.id, $scope.message).then(function(message) {
+			$users.addMessage(user, $scope.message).then(function(message) {
 				$scope.messages.unshift(message)
 			})
 		}
 		$('#message').focus()
 	})
 
-	app.controller('messageEditCtrl', function($scope, $users, user, message, $q) {
+	app.controller('messageEditCtrl', function($scope, $users, user, message) {
 		$scope.mode = 'Edit';
 		$scope.message = message;
 		$scope.submit = function() {
-			$users.updateMessage(user.id, message).then(function() {
+			$users.updateMessage(message).then(function() {
 				$scope.refreshMessages();
-			}, function(err) {
-				if(err == 'count=0') {
-					alert("Failed to update message. Please refresh data");
-					return null;
-				}
-				else
-					return $q.reject(err);
 			})
 		}
 		$('#message').focus()
