@@ -3,6 +3,9 @@
 
 	var app = angular.module('app', ['ngAnimate', 'restangular', 'ui.router', 'ct.ui.router.extras.sticky', 'ct.ui.router.extras.dsr']);
 
+	app.constant('$urlPaths', {
+		api: 'http://localhost:3000/api'
+	})
 	app.run(function(Restangular, $rootScope, $state, $stateParams, $location) {
 		Restangular.setErrorInterceptor(function(response, deferred, responseHandler) {
 			console.log('error:', response)
@@ -21,9 +24,9 @@
 			console.log('>> ' + to.name);
 		})
 	})
-	app.config(function(RestangularProvider, $stateProvider, $urlRouterProvider) {
+	app.config(function(RestangularProvider, $stateProvider, $urlRouterProvider, $urlPaths) {
 
-		RestangularProvider.setBaseUrl('http://localhost:3000/api');
+		RestangularProvider.setBaseUrl($urlPaths.api);
 
 		//$urlRouterProvider.otherwise()
 		$stateProvider
@@ -40,8 +43,8 @@
 				url: '/user/{userId:int}',
 				template: '<ui-view></ui-view>',
 				resolve: {
-					user: function(Restangular, $stateParams) {
-						return Restangular.one('users', $stateParams.userId).get();
+					user: function($users, $stateParams) {
+						return $users.getOne($stateParams.userId);
 					}
 				}
 			})
@@ -72,11 +75,11 @@
 			})
 	})
 
-	app.controller('bodyCtrl', function ($scope, Restangular) {
+	app.controller('bodyCtrl', function ($scope, Restangular, $users) {
 		$scope.users = [];
 
 		$scope.refreshUsers =  refreshUsers = function() {
-			Restangular.all('users').getList().then(function(users) {
+			$users.getAll().then(function(users) {
 
 				// remove from scope.users what's not in users
 				$scope.users.forEach(function(v) {
@@ -108,7 +111,7 @@
 		};
 
 		$scope.removeUser = function(user) {
-			user.remove().then(function() {
+			$users.remove(user).then(function() {
 				refreshUsers();
 			})
 		}
@@ -116,27 +119,27 @@
 		refreshUsers()
 	})
 
-	app.controller('userAddCtrl', function($scope, Restangular) {
+	app.controller('userAddCtrl', function($scope, $users) {
 		$scope.mode = 'add';
 		$scope.submit = function() {
-			Restangular.all('users').post({name: $scope.user.name, age: $scope.user.age}).then(function() {
+			$users.add($scope.user).then(function() {
 				$scope.refreshUsers();
 			})
 		}
 		$('#user-name').focus()
 	})
 
-	app.controller('userEditCtrl', function($scope, user) {
+	app.controller('userEditCtrl', function($scope, user, $users) {
 		$scope.mode = 'edit';
 		$scope.user = user;
 		$scope.submit = function() {
-			user.put().then(function() {
+			$users.update(user).then(function() {
 				$scope.refreshUsers();
 			})
 		}
 		$('#user-name').focus()
 	})
-	app.controller('messagesCtrl', function($scope, user) {
+	app.controller('messagesCtrl', function($scope, user, $users) {
 
 		$scope.refreshMessages = refreshMessages = function() {
 			user.getList('messages').then(function(messages) {
@@ -145,7 +148,7 @@
 		}
 
 		$scope.removeMessage = function(message) {
-			user.customDELETE('messages/' + message.id).then(function() {
+			$users.removeMessage(message).then(function() {
 				_.remove($scope.messages, message);
 			})
 		}
@@ -153,21 +156,21 @@
 		refreshMessages();
 	})
 
-	app.controller('messageAddCtrl', function($scope, user) {
+	app.controller('messageAddCtrl', function($scope, user, $users) {
 		$scope.mode = 'Add';
 		$scope.submit = function() {
-			user.post('messages', {message: $scope.message.message}).then(function(message) {
+			$users.addMessage($scope.message, user).then(function(message) {
 				$scope.messages.unshift(message)
 			})
 		}
 		$('#message').focus()
 	})
 
-	app.controller('messageEditCtrl', function($scope, message) {
+	app.controller('messageEditCtrl', function($scope, $users, user, message) {
 		$scope.mode = 'Edit';
 		$scope.message = message;
 		$scope.submit = function() {
-			message.put().then(function() {
+			$users.updateMessage(message).then(function() {
 				$scope.refreshMessages();
 			})
 		}
