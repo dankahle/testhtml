@@ -1,92 +1,69 @@
-
-(function() {
+(function () {
 
 	angular.module('app')
-		.factory('$users', function(Restangular, $state, $stateParams, $rootScope, $urlPaths, $http) {
+		.factory('$users', function (Restangular, $state, $stateParams, $rootScope, $urlPaths, $http) {
 
 			var exp = {};
 
-			exp.getAll = function() {
-				return Restangular.all('users').getList();
+			exp.getAll = function () {
+				return $http.get($urlPaths.api + '/users')
+					.then(function(resp) {
+						return resp.data;
+					})
 			};
 
-			exp.getOne = function(userId) {
-				return Restangular.one('users', userId).get()
+			exp.getOne = function (userId) {
+				return $http.get($urlPaths.api + '/users/' + userId)
+					.then(function(resp) {
+						return resp.data;
+					})
 			};
 
-			exp.add = function(user) {
-				return Restangular.all('users').post({name: user.name, age: user.age});
+			exp.add = function (user) {
+				return $http.post($urlPaths.api + '/users', {name: user.name, age: user.age})
+					.then(function(resp) {
+						return resp.data;
+					})
 			};
 
-			exp.update = function(user) {
-				if(user.put)
-					return user.put();
-				else {
-					return $http.put($urlPaths.api + '/users/' + user.id, user).then(function(response) {
-						return response.data;
-					});
-
-/*             // this is stupid, 2 calls to the server instea of one
-					this.getOne(user.id).then(function(retUser) {
-						_.extend(retUser, user);
-						retUser.put();
-					 })
-*/
-				}
-
+			exp.update = function (user) {
+				return $http.put($urlPaths.api + '/users/' + user.id, user)
+					.then(function(resp) {
+						return resp.data;
+					})
 			};
 
-			exp.remove = function(user) {
-				if (user.remove)
-					return user.remove();
-				else {
-					return $http.delete($urlPaths.api + '/users/' + user.id).then(function (response) {
-						return response.data;
-					});
-				}
+			exp.remove = function (userId) {
+				return $http.delete($urlPaths.api + '/users/' + userId)
+					.then(function(resp) {
+						return resp.data;
+					})
 			}
 
-			exp.getAllMessages = function(user) {
+			exp.getAllMessages = function (user) {
 				return user.getList('messages');
 			};
 
-			exp.getOneMessage = function(user, messageId) {
+			exp.getOneMessage = function (user, messageId) {
 				return user.one('messages', messageId).get()
 			};
 
-			exp.addMessage = function(message, user, userId) {
-				var _message = {message: message.message};
-				if(user.post)
-					return user.post('messages', _message);
-				else {
-					return $http.post($urlPaths.api + '/users/' + userId + '/messages', _message)
-						.then(function(response) {
-							return response.data;
-						})
-				}
+			exp.addMessage = function (user, message) {
+				return user.post('messages', message)
+					.then(function(message) {
+						// restangular restangularizes the return message, but for some reason doens't
+						// set it's parent to user, so we have to restangularize it again, this time with a parent
+						Restangular.restangularizeElement(user, message, 'messages');
+						return message;
+					})
 			};
 
-			exp.updateMessage = function(message, userId) {
-				var _message = {message: message.message};
-				if(message.put)
-					return message.put()
-				else {
-					return $http.put($urlPaths.api + '/users/' + userId + '/messages/' + message.id, _message)
-						.then(function(response) {
-							return response.data;
-						})
-				}
+			exp.updateMessage = function (message) {
+				return message.put()
 			};
 
-			exp.removeMessage = function(message, userId) {
-				if(message.remove)
-					return message.remove()
-				else {
-					return $http.put($urlPaths.api + '/users/' + userId + '/messages/' + message.id, _message)
-						.then(function(response) {
-							return response.data;
-						})
-				}
+			exp.removeMessage = function (message) {
+				return message.remove()
 			};
 
 			return exp;

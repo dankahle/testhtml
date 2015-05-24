@@ -111,7 +111,7 @@
 		};
 
 		$scope.removeUser = function(user) {
-			$users.remove(user).then(function() {
+			$users.remove(user.id).then(function() {
 				refreshUsers();
 			})
 		}
@@ -159,7 +159,7 @@
 	app.controller('messageAddCtrl', function($scope, user, $users) {
 		$scope.mode = 'Add';
 		$scope.submit = function() {
-			$users.addMessage($scope.message, user).then(function(message) {
+			$users.addMessage(user, $scope.message).then(function(message) {
 				$scope.messages.unshift(message)
 			})
 		}
