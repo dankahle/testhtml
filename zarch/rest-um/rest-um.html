@@ -39,11 +39,11 @@
 
 		<ul class="list-unstyled">
 			<li class="animate clearfix" ng-repeat="user in users">
-				<a class="usernav-name" ui-sref="user.message({userId: user.id})">
+				<a class="usernav-name" ui-sref="user.message({userId: user._id})">
 					<span class="h4">{{user.name}}</span></a>
 
 				<span class="usernav-links">
-					<a ui-sref="user.edit({userId: user.id})">profile</a>
+					<a ui-sref="user.edit({userId: user._id})">profile</a>
 					<a href="" ng-click="removeUser(user)">del</a>
 				</span>
 
@@ -62,7 +62,7 @@
 			<div class="top-header">
 				<span class="h3">Profile:</span>
 			</div>
-			<form class="form-horizontal" ng-submit="submit()">
+			<form name="formUser" class="form-horizontal" ng-submit="submit()" novalidate>
 				<div class="form-group">
 					<label for="user-name" class="col-sm-2 control-label">Name</label>
 					<div class="col-sm-10">
@@ -70,19 +70,22 @@
 					</div>
 				</div>
 				<div class="form-group">
-					<label for="user-age" class="col-sm-2 control-label">Age</label>
+					<label for="user_age" class="col-sm-2 control-label">Age</label>
 					<div class="col-sm-10">
-						<input id="user-age" ng-model="user.age" class="form-control">
+						<input id="user_age" name="user_age" ng-model="user.age" ng-pattern="/^\d*$/" required class="form-control">
+						<div ng-show="formUser.user_age.$error.pattern"  class="text-danger">Please enter a number</div>
+						<div ng-show="formUser.user_age.$touched && formUser.user_age.$error.required"  class="text-danger">Required</div>
 					</div>
 				</div>
 				<div class="form-group">
 					<div class="col-sm-offset-2 col-sm-10">
 						<button type="button" class="btn btn-default" ng-click="$state.go('home')">Cancel</button>
-						<button type="submit" class="btn btn-primary" ng-show="$state.includes('**.add')">Add</button>
-						<button type="submit" class="btn btn-primary" ng-show="$state.includes('**.edit')">Update</button>
+						<button type="submit" ng-disabled="formUser.$invalid" class="btn btn-primary" ng-show="$state.includes('**.add')">Add</button>
+						<button type="submit" ng-disabled="formUser.$invalid" class="btn btn-primary" ng-show="$state.includes('**.edit')">Update</button>
 					</div>
 				</div>
 			</form>
+			<!--form.$error: {{formUser.user_age.$error}}<br>-->
 		</div>
 	</div>
 </script>
@@ -101,7 +104,7 @@
 			<ul class="list-group messages">
 				<li class="list-group-item animate" ng-repeat="msg in messages" >
 						<div>{{msg.message}}</div>
-						<a ui-sref="user.message.edit({messageId: msg.id})">edit</a>
+						<a ui-sref="user.message.edit({messageId: msg._id})">edit</a>
 						<a href="" ng-click="removeMessage(msg)">del</a>
 				</li>
 			</ul>
@@ -118,7 +121,7 @@
 	</div>
 	<form class="message-form" ng-submit="submit()">
 		<div class="form-group">
-			<label for="message">Messages</label>
+			<label for="message">Message</label>
 			<textarea id="message" ng-model="message.message" class="form-control" rows="5"></textarea>
 		</div>
 		<div class="form-group">

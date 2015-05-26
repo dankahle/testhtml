@@ -1,0 +1,70 @@
+//@import (reference) '../bower_components/bootstrap/less/bootstrap';
+//@import (reference) 'extra';
+
+
+.usernav {
+
+  @navbar-line-height: 48px;
+
+  ul > li {
+    border-top: thin solid rgba(0,0,0,.2);
+  }
+  > div {
+    border-top: thin solid rgba(0,0,0,.2);
+  }
+
+  span, a {
+    line-height: 40px;
+
+  }
+
+  /*
+
+  .usernav-name {
+    display: inline-block;
+    width: 70%;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    span {
+      margin: 0;
+      line-height: @navbar-line-height;
+    }
+  }
+
+  .usernav-links {
+    float: right;
+    line-height: @navbar-line-height;
+    text-align: center;
+    display: inline-block;
+    width: 30%;
+    span, a {
+      margin: 0;
+      line-height: @navbar-line-height;
+    }
+  }
+
+  */
+  .animate {
+    max-height: @navbar-line-height;
+  }
+  .animate.ng-enter,
+  .animate.ng-move,
+  .animate.ng-leave {
+    transition:all linear 1s;
+  }
+
+  .animate.ng-leave.ng-leave-active,
+  .animate.ng-move,
+    .animate.ng-enter {
+    opacity:0;
+    max-height:0px;
+  }
+
+  .animate.ng-leave,
+  .animate.ng-move.ng-move-active,
+    .animate.ng-enter.ng-enter-active {
+    opacity:1;
+    max-height: @navbar-line-height;
+  }
+}
