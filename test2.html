@@ -30,13 +30,19 @@
 	</style>
 </head>
 <body ng-controller="ctrl" class="container-fluid">
-<button ng-click="curPage = curPage + 1">click</button>
-<div ng-repeat="item in [4,5,6]" ng-class="{one: curPage == $index}">{{item}}</div>
-curPage: {{curPage}}
+
 
 
 <script>
-	var time = new Date().getTime();
+
+	$(document).on('myevent', function(e) {
+		//e.cancel = true;
+	})
+	var event = $.Event('myevent');
+	event.cancel = false;
+	$(document).trigger(event);
+	if(event.cancel)
+		console.log('cancelled')
 
 	var app = angular.module('app', ['restangular', 'ui.router']);
 

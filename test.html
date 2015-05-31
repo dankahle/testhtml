@@ -25,7 +25,7 @@
 
 <div class="dk-grid" ng-cloak ng-controller="gridCtrl">
 	<div class="table-wrapper">
-		<span ng-show="noResults">No results</span>
+		<div class="no-results" ng-show="noResults">No results</div>
 		<table class="table" ng-hide="noResults">
 			<thead>
 			<th></th>
@@ -69,7 +69,11 @@
 			</li>
 		</ul>
 	</nav>
-	curPage: {{curPage}}<br>
+	<nav>
+		<ul class="pagination">
+			<li><a>{{tableInfo}}</a></li>
+		</ul>
+	</nav>
 </div>
 
 <script>
@@ -91,15 +95,22 @@
 		$scope.pageSize = 5;
 		var pageRangeSize = 4;
 		var numPages = $scope.numPages = 0;
-		// rows + header * 37, 20 for table margin bottom
-		var tableMinHeight = ($scope.pageSize + 1) * 37 + 20;
-		$('.table-wrapper').css('min-height', tableMinHeight + 'px');
+		var allUsers = [];
 
 		var setNumPages = function() {
 			var divPages = Math.floor(allUsers.length / $scope.pageSize);
 			numPages = $scope.numPages = allUsers.length % $scope.pageSize > 0? divPages + 1: divPages;
 		}
 
+		var setTableMinHeight = function() {
+			var tableMinHeight;
+			if($scope.noResults)
+				tableMinHeight = 40 + 20 + 2; //margin+padding+border-top
+			else
+				tableMinHeight = ($scope.pageSize + 1) * 37 + 20;// rows + header * 37, 20 for table margin bottom
+
+			$('.table-wrapper').css('min-height', tableMinHeight + 'px');
+		}
 		$scope.setPageRange = function(dir, changePage) {
 			var calcMaxPage = ($scope.curPage+1)*pageRangeSize;
 			var nextMaxPage =  calcMaxPage > numPages? numPages: calcMaxPage;
@@ -118,23 +129,85 @@
 				var newEnd = newStart+pageRangeSize <= numPages? newStart+pageRangeSize: numPages;
 				console.log('prevrange', newStart, newEnd, $scope.curPage);
 				$scope.pages = _.range(newStart, newEnd);
-				if($scope.curPage < newStart || $scope.curPage > newEnd - 1)
+				if($scope.curPage < newStart || $scope.curPage > newEnd - 1) {
 					$scope.curPage = newStart;
+					getPage();
+				}
 			}
 			else if(dir == 'up') {
 				var newStart = curStartPage + pageRangeSize <= numPages - pageRangeSize? curStartPage + pageRangeSize: numPages - pageRangeSize;
 				var newEnd = newStart+pageRangeSize <= numPages? newStart+pageRangeSize: numPages;
 				console.log('nextrange', newStart, newEnd, $scope.curPage);
 				$scope.pages = _.range(newStart, newEnd);
-				if($scope.curPage < newStart || $scope.curPage > newEnd - 1)
+				if($scope.curPage < newStart || $scope.curPage > newEnd - 1) {
 					$scope.curPage = newStart;
+					getPage();
+				}
 			}
+
+		}
+
+		var refresh = function() {
+			$http.get('tabledata.json').then(function (resp) {
+				allUsers = resp.data.map(function (v, i) {
+					v.row = i + 1;
+					if (v.bday)
+						v.bday = new Date(v.bday);
+					return v;
+				});
+				if (allUsers.length == 0) {
+					$scope.noResults = true;
+					setTableMinHeight();
+				}
+				else {
+					$scope.noResults = false;
+					setTableMinHeight();
+					$scope.curPage = 0;
+					getPage();
+					setNumPages();
+					$scope.setPageRange('init');
+				}
+			});
 
 		}
 
 
 		var getPage = function() {
-			$scope.users = allUsers.slice($scope.pageSize*$scope.curPage, $scope.pageSize*($scope.curPage+1));
+			var start = $scope.pageSize*$scope.curPage;
+			var end = $scope.pageSize*($scope.curPage+1);
+			$scope.users = allUsers.slice(start, end);
+			$scope.tableInfo = '' + (start + 1) + ' - ' + end + ' of ' + allUsers.length;
+		};
+
+		var lastSortName, lastSortKey;
+		$scope.sortKey = '';
+		$scope.sort = function (sortName) {
+			if (sortName == lastSortName) {
+				if (lastSortKey.substr(-3) == '-up') {
+					lastSortKey = sortName + '-dn';
+					$scope.sortKey = lastSortKey;
+				}
+				else {
+					lastSortKey = sortName + '-up';
+					$scope.sortKey = lastSortKey;
+				}
+			}
+			else {
+				lastSortName = sortName;
+				lastSortKey = sortName + '-up';
+				$scope.sortKey = lastSortKey;
+			}
+
+			var sortFcn = getSortFcn(sortName == 'bday' ? 'date' : '', lastSortKey);
+			console.log(sortFcn);
+			allUsers.sort(sortFcn)
+			allUsers.map(function(v,i) {
+				v.row = i + 1;
+				return v;
+			});
+			$scope.curPage = 0;
+			getPage()
+			$scope.setPageRange('init');
 		};
 
 		$scope.isFirstPage = function() {
@@ -177,26 +250,6 @@
 			getPage(page);
 		}
 
-		var allUsers = [];
-
-		var refresh = function() {
-			$http.get('tabledata.json').then(function (resp) {
-				allUsers = resp.data.map(function (v,i) {
-					v.row = i + 1;
-					if (v.bday)
-						v.bday = new Date(v.bday);
-					return v;
-				});
-				if(allUsers.length == 0)
-					$scope.noResults = true;
-				else {
-					getPage();
-					setNumPages();
-					$scope.setPageRange('init');
-				}
-			});
-
-		}
 
 		$scope.headers = [
 			{name: 'name', title: 'Name'},
@@ -205,35 +258,6 @@
 			{name: 'bday', title: 'Birthday'}
 		]
 
-		var lastSortName, lastSortKey;
-		$scope.sortKey = '';
-		$scope.sort = function (sortName) {
-			if (sortName == lastSortName) {
-				if (lastSortKey.substr(-3) == '-up') {
-					lastSortKey = sortName + '-dn';
-					$scope.sortKey = lastSortKey;
-				}
-				else {
-					lastSortKey = sortName + '-up';
-					$scope.sortKey = lastSortKey;
-				}
-			}
-			else {
-				lastSortName = sortName;
-				lastSortKey = sortName + '-up';
-				$scope.sortKey = lastSortKey;
-			}
-
-			var sortFcn = getSortFcn(sortName == 'bday' ? 'date' : '', lastSortKey);
-			console.log(sortFcn);
-			allUsers.sort(sortFcn)
-			allUsers.map(function(v,i) {
-				v.row = i + 1;
-				return v;
-			});
-			$scope.curPage = 0;
-			getPage()
-		};
 
 		refresh();
 
