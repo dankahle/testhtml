@@ -1,0 +1,85 @@
+//@import (reference) '../bower_components/bootstrap/less/bootstrap';
+//@import (reference) 'extra';
+
+.outline() {
+  outline: thin solid;
+  outline-offset: -1px;
+}
+
+.clearfix() {
+  &:before,
+  &:after {
+    content: " "; // 1
+    display: table; // 2
+  }
+  &:after {
+    clear: both;
+  }
+}
+
+@head-height: 60px;
+
+html { height: 100%; }
+
+body {
+  min-height: 100%;
+  position: relative;
+  .outline;
+  outline-color: red;
+}
+
+.main-content {
+  margin-bottom: @head-height;
+}
+
+[class^=col-], [class*=' col-'] {
+  /*
+  background: lightgray;
+  background-clip: content-box;
+  */
+  .outline;
+  position: relative;
+}
+
+ui-view {
+  &.ng-enter {
+    //position: absolute;
+    transition: opacity 1s;
+    opacity: 0;
+  }
+  &.ng-enter.ng-enter-active {
+    opacity: 1
+  }
+  &.ng-leave {
+    display: none;
+  }
+}
+
+header, footer {
+  height: @head-height;
+  .outline;
+}
+
+footer {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 0;
+}
+
+.list-unstyled {
+  a {
+    display: inline-block;
+    color: green;
+    border: 2px solid;
+    padding: 5px 12px;
+    &:hover {
+      text-decoration: none;
+    }
+  }
+  li:not(:first-child) {
+    //.outline;
+    margin-top: 4px;
+  }
+}
+

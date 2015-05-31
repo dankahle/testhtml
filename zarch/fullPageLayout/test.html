@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html ng-app='app'>
+<head lang="en">
+	<title>test</title>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+	<!--<script src="bower_components/modernizr/modernizr.js"></script>-->
+	<!--<base href="https://developer.mozilla.org/samples/cssref/">-->
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+	<link rel="stylesheet" href="bower_components/bootstrap/less/bootstrap.css">
+	<link rel="stylesheet" href="bower_components/font-awesome/css/font-awesome.css">
+	<link rel="stylesheet" href="less/test.css">
+	<script src="bower_components/lodash/dist/lodash.js"></script>
+	<script src="bower_components/jquery/dist/jquery.js"></script>
+	<script src="bower_components/bootstrap/dist/js/bootstrap.js"></script>
+	<script src="bower_components/angular/angular.js"></script>
+	<script src="bower_components/angular-animate/angular-animate.js"></script>
+	<script src="bower_components/restangular/dist/restangular.js"></script>
+	<script src="bower_components/angular-ui-router/release/angular-ui-router.js"></script>
+	<style>
+	</style>
+</head>
+<body ng-controller="ctrl" class="container-fluid">
+
+<div class="row">
+	<header>
+		<div class="col-sm-offset-9 col-sm-3">
+			<ui-view name="header"></ui-view>
+		</div>
+	</header>
+</div>
+
+
+<div class="row main-content">
+
+	<div class="col-sm-3">
+		<ul class="list-unstyled">
+			<li ng-repeat="nav in navs" ng-class="{active: $state.includes(nav.state)}">
+				<a ui-sref="{{nav.state}}">{{nav.name}}</a>
+			</li>
+		</ul>
+	</div>
+
+	<main class="col-sm-9 col-md-6">
+		<ui-view name="main"></ui-view>
+	</main>
+	<aside class="col-md-3 hidden-xs hidden-sm">
+		<ui-view name="aside"></ui-view>
+	</aside>
+</div>
+
+<div class="row">
+	<footer><ui-view name="footer"></ui-view></footer>
+</div>
+
+<script>
+	var app = angular.module('app', ['restangular', 'ui.router', 'ngAnimate']);
+	app.run(function (Restangular, $state, $stateParams, $rootScope, $location) {
+		Restangular.setErrorInterceptor(function (response, deferred, responseHandler) {
+			console.log('error:', response)
+			return true;
+		});
+
+		$rootScope.$state = $state;
+		$rootScope.$stateParams = $stateParams;
+		$rootScope.$location = $location;
+		$rootScope.log = console.log.bind(console);
+
+		$rootScope.$on('$stateChangeError', function (event, to, top, from, fromp, error) {
+			console.log(error.stack);
+		})
+		$rootScope.$on('$stateChangeSuccess', function (event, to, top, from, fromp, error) {
+			console.log('>> ' + to.name);
+		})
+	})
+	app.config(function (RestangularProvider, $stateProvider, $urlRouterProvider) {
+		RestangularProvider.setBaseUrl('http://localhost:3000/api');
+
+		$urlRouterProvider.otherwise('/');
+		$stateProvider
+			.state('home', {
+				url: '/',
+				views: {
+					header: {template: 'home header'},
+					main: {template: 'home main'},
+					aside: {template: 'home aside'},
+					footer: {template: 'home footer'}
+				}
+			})
+			.state('profile', {
+				url: '/profile',
+				views: {
+					header: {template: 'profile header'},
+//					main: {template: 'profile main'},
+					main: {templateUrl: 'profile.html'},
+					aside: {template: 'profile aside'},
+					footer: {template: 'profile footer'}
+				}
+			})
+			.state('list', {
+				url: '/list',
+				views: {
+					header: {template: 'list header'},
+					main: {template: 'list main'},
+					aside: {template: 'list aside'},
+					footer: {template: 'list footer'}
+				}
+			})
+			.state('about', {
+				url: '/about',
+				views: {
+					header: {template: 'about header'},
+					main: {template: 'about main'},
+					aside: {template: 'about aside'},
+					footer: {template: 'about footer'}
+				}
+			})
+
+
+	});
+
+	app.controller('ctrl', function ($scope, $state, $stateParams, Restangular) {
+
+		$scope.navs = [
+			{state: 'home', name: 'Home'},
+			{state: 'profile', name: 'Profile'},
+			{state: 'list', name: 'List'},
+			{state: 'about', name: 'About Us'},
+		]
+
+		$scope.test = function () {
+			console.log('here')
+		}
+	})
+</script>
+<script type="text/ng-template" id="profile.html">
+	lala<br>lala<br>lala<br>lala<br>lala<br>lala<br>lala<br>lala<br>lala<br>lala<br>
+	lala<br>lala<br>lala<br>lala<br>lala<br>lala<br>lala<br>lala<br>lala<br>lala<br>
+	lala<br>lala<br>lala<br>lala<br>lala<br>lala<br>lala<br>lala<br>lala<br>lala<br>
+	lala<br>lala<br>lala<br>lala<br>lala<br>lala<br>lala<br>lala<br>lala<br>lala<br>
+	lala<br>lala<br>lala<br>lala<br>lala<br>lala<br>lala<br>lala<br>lala<br>
+	<span id='bottom'><strong>bottom</strong></span><br>
+
+</script>
+</body>
+</html>

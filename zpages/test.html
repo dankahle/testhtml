@@ -1,55 +1,60 @@
 <!DOCTYPE html>
 <html ng-app='app'>
 <head lang="en">
-	<title>test2</title>
+	<title>test</title>
 	<meta charset="UTF-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge"/>
-
 	<!--<script src="bower_components/modernizr/modernizr.js"></script>-->
 	<!--<base href="https://developer.mozilla.org/samples/cssref/">-->
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-	<title>test</title>
 	<link rel="stylesheet" href="bower_components/bootstrap/less/bootstrap.css">
 	<link rel="stylesheet" href="bower_components/font-awesome/css/font-awesome.css">
-	<link rel="stylesheet" href="less/test2.css">
-	<script src="bower_components/lodash/lodash.js"></script>
-	<script src="bower_components/numeral/numeral.js"></script>
+	<link rel="stylesheet" href="less/test.css">
+	<script src="bower_components/lodash/dist/lodash.js"></script>
 	<script src="bower_components/jquery/dist/jquery.js"></script>
 	<script src="bower_components/bootstrap/dist/js/bootstrap.js"></script>
 	<script src="bower_components/angular/angular.js"></script>
+	<script src="bower_components/angular-animate/angular-animate.js"></script>
 	<script src="bower_components/restangular/dist/restangular.js"></script>
 	<script src="bower_components/angular-ui-router/release/angular-ui-router.js"></script>
-
+	<script src="test.js"></script>
+	<script src="zpages/home/landingDirective.js"></script>
+	<script src="zpages/searchr/mainCtrl.js"></script>
 	<style>
-		/*
-				body {margin:0px; padding: 0px; box-sizing: border-box; }
-				.box { width: 100px; height: 100px;}
-				.outline { outline: thin solid; outline-offset: -1px;}
-		*/
-		.one {background:red;}
 	</style>
 </head>
 <body ng-controller="ctrl" class="container-fluid">
-<button ng-click="curPage = curPage + 1">click</button>
-<div ng-repeat="item in [4,5,6]" ng-class="{one: curPage == $index}">{{item}}</div>
-curPage: {{curPage}}
+
+<div class="row">
+	<header>
+		<div class="col-sm-offset-9 col-sm-3">
+			<ui-view name="header"></ui-view>
+		</div>
+	</header>
+</div>
 
 
-<script>
-	var time = new Date().getTime();
+<div class="row main-content">
 
-	var app = angular.module('app', ['restangular', 'ui.router']);
+	<div class="col-sm-3">
+		<ul class="list-unstyled">
+			<li ng-repeat="nav in navs" ng-class="{active: $state.includes(nav.state)}">
+				<a ui-sref="{{nav.state}}">{{nav.name}}</a>
+			</li>
+		</ul>
+	</div>
 
+	<main class="col-sm-9 col-md-6">
+		<ui-view name="main"></ui-view>
+	</main>
+	<aside class="col-md-3 hidden-xs hidden-sm">
+		<ui-view name="aside"></ui-view>
+	</aside>
+</div>
 
-	app.config(function (RestangularProvider, $stateProvider, $urlRouterProvider) {
-		RestangularProvider.setBaseUrl('http://localhost:3000/api');
+<div class="row">
+	<footer><ui-view name="footer"></ui-view></footer>
+</div>
 
-
-	})
-
-	app.controller('ctrl', function ($scope, $state, $stateParams, Restangular) {
-		$scope.curPage = 0;
-	})
-</script>
 </body>
 </html>

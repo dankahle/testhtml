@@ -10,58 +10,280 @@
 	<link rel="stylesheet" href="bower_components/bootstrap/less/bootstrap.css">
 	<link rel="stylesheet" href="bower_components/font-awesome/css/font-awesome.css">
 	<link rel="stylesheet" href="less/test.css">
-	<script src="bower_components/lodash/dist/lodash.js"></script>
+	<script src="bower_components/lodash/lodash.js"></script>
+	<script src="bower_components/moment/moment.js"></script>
 	<script src="bower_components/jquery/dist/jquery.js"></script>
 	<script src="bower_components/bootstrap/dist/js/bootstrap.js"></script>
 	<script src="bower_components/angular/angular.js"></script>
 	<script src="bower_components/angular-animate/angular-animate.js"></script>
 	<script src="bower_components/restangular/dist/restangular.js"></script>
 	<script src="bower_components/angular-ui-router/release/angular-ui-router.js"></script>
-
-
-	<script>
-	</script>
 	<style>
-		/*body {margin:0px; padding:100px; }*/
-		.box { width: 100px; height: 100px; border: thin solid; float: left; }
-		.border { border: thin solid; }
-		.outline { outline: thin solid; outline-offset: -1px;}
-
-
 	</style>
 </head>
 <body ng-controller="ctrl" class="container-fluid">
 
+<div class="dk-grid" ng-cloak ng-controller="gridCtrl">
+	<div class="table-wrapper">
+		<span ng-show="noResults">No results</span>
+		<table class="table" ng-hide="noResults">
+			<thead>
+			<th></th>
+			<th ng-repeat="header in headers">
+				<a href="" ng-click="sort(header.name)">
+					{{header.title}}
+			<span class="sort-direction">
+				<span ng-show="sortKey == '{{header.name}}-up'" class="fa fa-angle-up"></span>
+				<span ng-show="sortKey == '{{header.name}}-dn'" class="fa fa-angle-down"></span>
+			</span>
+				</a>
+			</th>
+			</thead>
+			<tbody>
+			<tr ng-repeat="user in users">
+				<td>{{user.row}}</td>
+				<td>{{user.name}}</td>
+				<td>{{user.age}}</td>
+				<td>{{user.sex}}</td>
+				<td>{{moment(user.bday).format('L')}}</td>
+			</tr>
+			</tbody>
+		</table>
+	</div>
+	<nav>
+		<ul class="pagination" ng-show="numPages > 1">
+			<li ng-class="{disabled: isFirstPage()}">
+				<a href="#" ng-click="prevPage()" class="arrow" aria-label="Previous"><span class="fa fa-angle-double-left"></span></a>
+			</li>
+			<li ng-hide="isFirstRange()">
+				<a class="page-range" href="#" ng-click="setPageRange('dn')"><span>...</span></a>
+			</li>
+			<li ng-repeat="page in pages" ng-class="{active: curPage == page}">
+				<a href="#" ng-click="setPage(page)">{{page+1}}</a>
+			</li>
+			<li ng-hide="isLastRange()">
+				<a class="page-range" href="#" ng-click="setPageRange('up')"><span>...</span></a>
+			</li>
+			<li ng-class="{disabled: isLastPage()}">
+				<a href="#" ng-click="nextPage()" class="arrow" aria-label="Previous"><span class="fa fa-angle-double-right"></span></a>
+			</li>
+		</ul>
+	</nav>
+	curPage: {{curPage}}<br>
+</div>
 
 <script>
 	var app = angular.module('app', ['restangular', 'ui.router', 'ngAnimate']);
-	app.run(function(Restangular, $state, $stateParams, $rootScope, $location) {
-		Restangular.setErrorInterceptor(function(response, deferred, responseHandler) {
-			console.log('error:', response)
-			return true;
-		});
-
-		$rootScope.$state = $state;
-		$rootScope.$stateParams = $stateParams;
-		$rootScope.$location = $location;
-		$rootScope.log = console.log.bind(console);
-
-		$rootScope.$on('$stateChangeError', function(event, to, top, from, fromp, error) {
-			console.log(error.stack);
-		})
-		$rootScope.$on('$stateChangeSuccess', function(event, to, top, from, fromp, error) {
-			console.log('>> ' + to.name);
-		})
-	})
-	app.config(function(RestangularProvider, $stateProvider, $urlRouterProvider) {
+	app.config(function (RestangularProvider, $stateProvider, $urlRouterProvider) {
 		RestangularProvider.setBaseUrl('http://localhost:3000/api');
 	});
-
+	app.run(function ($rootScope) {
+		$rootScope.moment = moment;
+	})
 	app.controller('ctrl', function ($scope, $state, $stateParams, Restangular) {
 
 
+	})
+
+	app.controller('gridCtrl', function ($scope, $http) {
+		$scope.noResults = false;
+		$scope.curPage = 0;
+		$scope.pageSize = 5;
+		var pageRangeSize = 4;
+		var numPages = $scope.numPages = 0;
+		// rows + header * 37, 20 for table margin bottom
+		var tableMinHeight = ($scope.pageSize + 1) * 37 + 20;
+		$('.table-wrapper').css('min-height', tableMinHeight + 'px');
+
+		var setNumPages = function() {
+			var divPages = Math.floor(allUsers.length / $scope.pageSize);
+			numPages = $scope.numPages = allUsers.length % $scope.pageSize > 0? divPages + 1: divPages;
+		}
+
+		$scope.setPageRange = function(dir, changePage) {
+			var calcMaxPage = ($scope.curPage+1)*pageRangeSize;
+			var nextMaxPage =  calcMaxPage > numPages? numPages: calcMaxPage;
+			if(dir == 'init') {
+				$scope.pages = _.range(0, nextMaxPage);
+				return;
+			}
+
+			var minPage = 0,
+				curStartPage = _.first($scope.pages),
+				curEndPage = _.last($scope.pages);
+			if(dir == 'dn' && curStartPage == minPage || dir == 'up' && curEndPage == numPages)
+				return;
+			if(dir == 'dn') {
+				var newStart = curStartPage - pageRangeSize >=0? curStartPage - pageRangeSize: 0;
+				var newEnd = newStart+pageRangeSize <= numPages? newStart+pageRangeSize: numPages;
+				console.log('prevrange', newStart, newEnd, $scope.curPage);
+				$scope.pages = _.range(newStart, newEnd);
+				if($scope.curPage < newStart || $scope.curPage > newEnd - 1)
+					$scope.curPage = newStart;
+			}
+			else if(dir == 'up') {
+				var newStart = curStartPage + pageRangeSize <= numPages - pageRangeSize? curStartPage + pageRangeSize: numPages - pageRangeSize;
+				var newEnd = newStart+pageRangeSize <= numPages? newStart+pageRangeSize: numPages;
+				console.log('nextrange', newStart, newEnd, $scope.curPage);
+				$scope.pages = _.range(newStart, newEnd);
+				if($scope.curPage < newStart || $scope.curPage > newEnd - 1)
+					$scope.curPage = newStart;
+			}
+
+		}
+
+
+		var getPage = function() {
+			$scope.users = allUsers.slice($scope.pageSize*$scope.curPage, $scope.pageSize*($scope.curPage+1));
+		};
+
+		$scope.isFirstPage = function() {
+			return $scope.curPage == 0;
+		}
+		$scope.isLastPage = function() {
+			return $scope.curPage == numPages - 1;
+		}
+
+		$scope.isFirstRange = function() {
+			return _.first($scope.pages) == 0;
+		}
+
+		$scope.isLastRange = function() {
+			return _.last($scope.pages) == numPages - 1;
+		}
+
+		$scope.prevPage = function(){
+			if($scope.isFirstPage())
+				return;
+			var lastCurPage = $scope.curPage;
+			$scope.curPage--;
+			if(lastCurPage == _.first($scope.pages))
+				$scope.setPageRange('dn');
+			getPage();
+		}
+		$scope.nextPage = function(){
+			if($scope.isLastPage())
+				return;
+			var lastCurPage = $scope.curPage;
+			$scope.curPage++;// need to set before setPageRange so it can bump pages if needed
+			if(lastCurPage == _.last($scope.pages))
+				$scope.setPageRange('up');
+			getPage();
+		}
+		$scope.setPage = function(page) {
+			if($scope.curPage == page)
+				return;
+			$scope.curPage = page;
+			getPage(page);
+		}
+
+		var allUsers = [];
+
+		var refresh = function() {
+			$http.get('tabledata.json').then(function (resp) {
+				allUsers = resp.data.map(function (v,i) {
+					v.row = i + 1;
+					if (v.bday)
+						v.bday = new Date(v.bday);
+					return v;
+				});
+				if(allUsers.length == 0)
+					$scope.noResults = true;
+				else {
+					getPage();
+					setNumPages();
+					$scope.setPageRange('init');
+				}
+			});
+
+		}
+
+		$scope.headers = [
+			{name: 'name', title: 'Name'},
+			{name: 'age', title: 'Age'},
+			{name: 'sex', title: 'Sex'},
+			{name: 'bday', title: 'Birthday'}
+		]
+
+		var lastSortName, lastSortKey;
+		$scope.sortKey = '';
+		$scope.sort = function (sortName) {
+			if (sortName == lastSortName) {
+				if (lastSortKey.substr(-3) == '-up') {
+					lastSortKey = sortName + '-dn';
+					$scope.sortKey = lastSortKey;
+				}
+				else {
+					lastSortKey = sortName + '-up';
+					$scope.sortKey = lastSortKey;
+				}
+			}
+			else {
+				lastSortName = sortName;
+				lastSortKey = sortName + '-up';
+				$scope.sortKey = lastSortKey;
+			}
+
+			var sortFcn = getSortFcn(sortName == 'bday' ? 'date' : '', lastSortKey);
+			console.log(sortFcn);
+			allUsers.sort(sortFcn)
+			allUsers.map(function(v,i) {
+				v.row = i + 1;
+				return v;
+			});
+			$scope.curPage = 0;
+			getPage()
+		};
+
+		refresh();
 
 	})
+
+	function getSortFcn(type, key) {
+		var direction = key.substr(-2) == 'up' ? 'up' : 'dn';
+		var prop = key.substring(0, key.length - 3);
+		if (type == 'date') {
+			if (direction == 'up') {
+				return function (a, b) {
+					var ap = a['' + prop] ? a[prop].getTime() : 0;
+					var bp = b[prop] ? b[prop].getTime() : 0;
+					if (ap < bp) return -1;
+					if (ap > bp) return 1;
+					return 0;
+				}
+			}
+			else {
+				return function (a, b) {
+					var ap = a['' + prop] ? a[prop].getTime() : 0;
+					var bp = b[prop] ? b[prop].getTime() : 0;
+					if (ap > bp) return -1;
+					if (ap < bp) return 1;
+					return 0;
+				}
+			}
+		}
+		else {
+			if (direction == 'up') {
+				return function (a, b) {
+					var ap = a[prop];
+					var bp = b[prop];
+					if (ap < bp) return -1;
+					if (ap > bp) return 1;
+					return 0;
+				}
+			}
+			else {
+				return function (a, b) {
+					var ap = a[prop];
+					var bp = b[prop];
+					if (ap > bp) return -1;
+					if (ap < bp) return 1;
+					return 0;
+				}
+			}
+		}
+	}
+
 </script>
 </body>
 </html>
