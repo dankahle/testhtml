@@ -85,17 +85,27 @@
 		$rootScope.moment = moment;
 	})
 	app.factory('$userRepo', function($http) {
+		var baseUrl = 'http://localhost:3000/api/users';
 		var exp = {};
 
 		exp.getAll = function() {
-			return $http.get('tabledata.json');
+			return $http.get(baseUrl);
 		};
-		exp.getPage = function(pageNo, pageSize) {
-			// return $http.get('baseUrl/api/users/getPage) would give you the object {data, numRecords}
-			return $http.get('tabledata.json').then(function(resp) {
-				return {data: resp.data, numRecords: resp.data.length};
-			});
+
+		exp.getPage = function(pageNo, pageSize, sortKey) {
+			var params = {pageno: pageNo, pagesize: pageSize};
+			if(sortKey) {
+				var name = sortKey.substring(0, sortKey.indexOf('-'));
+				if(sortKey.substr(-2) == 'dn')
+					name = '-' + name;
+				params.sort = name;
+			}
+			return $http.get(baseUrl + '/page', {params: params})
+				.then(function(resp) {
+					return resp.data;
+				});
 		}
+
 		return exp;
 	})
 
@@ -105,7 +115,7 @@
 	})
 
 	app.controller('gridCtrl', function ($scope, $userRepo) {
-		var mode = 'all';
+		var mode = 'page';
 		$scope.noResults = false;
 		$scope.curPage = 0;
 		$scope.pageSize = 5;
@@ -122,6 +132,7 @@
 
 			$('.table-wrapper').css('min-height', tableMinHeight + 'px');
 		}
+
 		$scope.setPageRange = function(dir, changePage) {
 			var calcMaxPage = ($scope.curPage+1)*pageRangeSize;
 			var nextMaxPage =  calcMaxPage > numPages? numPages: calcMaxPage;
@@ -160,7 +171,6 @@
 
 		var mapData = function (data) {
 			return data.map(function(v,i) {
-				v.row = i + 1;
 				if (v.bday)
 					v.bday = new Date(v.bday);
 				return v;
@@ -168,7 +178,7 @@
 		}
 
 		var refresh = function() {
-			if(mode = 'all') {
+			if(mode == 'all') {
 				$userRepo.getAll().then(function (resp) {
 					allUsers = mapData(resp.data);
 
@@ -180,6 +190,7 @@
 						$scope.noResults = false;
 						setTableMinHeight();
 						$scope.curPage = 0;
+						$scope.sortKey = undefined;
 						getPage();
 						numPages = $scope.numPages = Math.ceil(allUsers.length / $scope.pageSize);
 						$scope.setPageRange('init');
@@ -187,15 +198,14 @@
 				});
 			}
 			else {
-				$scope.curPage = 0;
-				getPage();
+				getPage(true);
 			}
 		}
 
 		var getTableInfoString = function(start, end, totalRecords) {
 			return '' + (start + 1) + ' - ' + end + ' of ' + totalRecords;
 		}
-		var getPage = function() {
+		var getPage = function(init) {
 			var start = $scope.pageSize*$scope.curPage;
 			var end = $scope.pageSize*($scope.curPage+1);
 			if(mode == 'all') {
@@ -203,15 +213,32 @@
 				$scope.tableInfo = getTableInfoString(start, end, allUsers.length);
 			}
 			else {
-				$userRepo.getPage($scope.curPage, $scope.pageSize).then(function(resp) {
-					$scope.users = resp.data;
+				if(init)
+					$scope.sortKey = undefined;
+
+				$userRepo.getPage($scope.curPage + 1, $scope.pageSize, $scope.sortKey).then(function(resp) {
+					$scope.users = mapData(resp.data);
 					$scope.tableInfo = getTableInfoString(start, end, resp.numRecords);
+
+					if (resp.numRecords == 0) {
+						$scope.noResults = true;
+						setTableMinHeight();
+					}
+					else {
+						$scope.noResults = false;
+						setTableMinHeight();
+						if(init)
+							$scope.curPage = 0;
+						numPages = $scope.numPages = Math.ceil(resp.numRecords / $scope.pageSize);
+						if(init)
+						 $scope.setPageRange('init');
+					}
+
 				})
 			}
 		};
 
 		var lastSortName, lastSortKey;
-		$scope.sortKey = '';
 		$scope.sort = function (sortName) {
 			if (sortName == lastSortName) {
 				if (lastSortKey.substr(-3) == '-up') {
@@ -229,16 +256,16 @@
 				$scope.sortKey = lastSortKey;
 			}
 
-			var sortFcn = getSortFcn(sortName == 'bday' ? 'date' : '', lastSortKey);
-			console.log(sortFcn);
-			allUsers.sort(sortFcn)
-			allUsers.map(function(v,i) {
-				v.row = i + 1;
-				return v;
-			});
-			$scope.curPage = 0;
-			getPage()
-			$scope.setPageRange('init');
+			if(mode == 'all') {
+				var sortFcn = getSortFcn(sortName == 'bday' ? 'date' : '', $scope.sortKey);
+				allUsers.sort(sortFcn)
+				$scope.curPage = 0;
+				getPage()
+				$scope.setPageRange('init');
+			}
+			else {
+				getPage();
+			}
 		};
 
 		$scope.isFirstPage = function() {
@@ -278,7 +305,7 @@
 			if($scope.curPage == page)
 				return;
 			$scope.curPage = page;
-			getPage(page);
+			getPage();
 		}
 
 

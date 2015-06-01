@@ -26,12 +26,18 @@
 				.box { width: 100px; height: 100px;}
 				.outline { outline: thin solid; outline-offset: -1px;}
 		*/
-		.one {background:red;}
+		.two {color: blue; font: normal normal normal 14px/1 FontAwesome;}
+		.one {color: red; font-size: 30px;}
+		.two:before {
+			content: 'shit '
+		}
 	</style>
 </head>
 <body ng-controller="ctrl" class="container-fluid">
 
-
+<span class="one">
+	<span class="fa fa-star">lala</span>
+</span>
 
 <script>
 
