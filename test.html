@@ -105,17 +105,13 @@
 	})
 
 	app.controller('gridCtrl', function ($scope, $userRepo) {
+		var mode = 'all';
 		$scope.noResults = false;
 		$scope.curPage = 0;
 		$scope.pageSize = 5;
 		var pageRangeSize = 4;
 		var numPages = $scope.numPages = 0;
 		var allUsers = [];
-
-		var setNumPages = function() {
-			var divPages = Math.floor(allUsers.length / $scope.pageSize);
-			numPages = $scope.numPages = allUsers.length % $scope.pageSize > 0? divPages + 1: divPages;
-		}
 
 		var setTableMinHeight = function() {
 			var tableMinHeight;
@@ -162,57 +158,56 @@
 
 		}
 
-		var refresh = function() {
-			$userRepo.getAll().then(function (resp) {
-				allUsers = resp.data.map(function (v, i) {
-					v.row = i + 1;
-					if (v.bday)
-						v.bday = new Date(v.bday);
-					return v;
-				});
-				if (allUsers.length == 0) {
-					$scope.noResults = true;
-					setTableMinHeight();
-				}
-				else {
-					$scope.noResults = false;
-					setTableMinHeight();
-					$scope.curPage = 0;
-					getPage();
-					setNumPages();
-					$scope.setPageRange('init');
-				}
-			});
-/*
-			$http.get('tabledata.json').then(function (resp) {
-				allUsers = resp.data.map(function (v, i) {
-					v.row = i + 1;
-					if (v.bday)
-						v.bday = new Date(v.bday);
-					return v;
-				});
-				if (allUsers.length == 0) {
-					$scope.noResults = true;
-					setTableMinHeight();
-				}
-				else {
-					$scope.noResults = false;
-					setTableMinHeight();
-					$scope.curPage = 0;
-					getPage();
-					setNumPages();
-					$scope.setPageRange('init');
-				}
-			});
-*/
-
+		var mapData = function (data) {
+			return data.map(function(v,i) {
+				v.row = i + 1;
+				if (v.bday)
+					v.bday = new Date(v.bday);
+				return v;
+			})
 		}
 
+		var refresh = function() {
+			if(mode = 'all') {
+				$userRepo.getAll().then(function (resp) {
+					allUsers = mapData(resp.data);
+
+					if (allUsers.length == 0) {
+						$scope.noResults = true;
+						setTableMinHeight();
+					}
+					else {
+						$scope.noResults = false;
+						setTableMinHeight();
+						$scope.curPage = 0;
+						getPage();
+						numPages = $scope.numPages = Math.ceil(allUsers.length / $scope.pageSize);
+						$scope.setPageRange('init');
+					}
+				});
+			}
+			else {
+				$scope.curPage = 0;
+				getPage();
+			}
+		}
+
+		var getTableInfoString = function(start, end, totalRecords) {
+			return '' + (start + 1) + ' - ' + end + ' of ' + totalRecords;
+		}
 		var getPage = function() {
 			var start = $scope.pageSize*$scope.curPage;
 			var end = $scope.pageSize*($scope.curPage+1);
-			$scope.users = allUsers.slice(start, end);
-			$scope.tableInfo = '' + (start + 1) + ' - ' + end + ' of ' + allUsers.length;
+			if(mode == 'all') {
+				$scope.users = allUsers.slice(start, end);
+				$scope.tableInfo = getTableInfoString(start, end, allUsers.length);
+			}
+			else {
+				$userRepo.getPage($scope.curPage, $scope.pageSize).then(function(resp) {
+					$scope.users = resp.data;
+					$scope.tableInfo = getTableInfoString(start, end, resp.numRecords);
+				})
+			}
 		};
 
 		var lastSortName, lastSortKey;
