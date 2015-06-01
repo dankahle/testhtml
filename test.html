@@ -84,12 +84,27 @@
 	app.run(function ($rootScope) {
 		$rootScope.moment = moment;
 	})
+	app.factory('$userRepo', function($http) {
+		var exp = {};
+
+		exp.getAll = function() {
+			return $http.get('tabledata.json');
+		};
+		exp.getPage = function(pageNo, pageSize) {
+			// return $http.get('baseUrl/api/users/getPage) would give you the object {data, numRecords}
+			return $http.get('tabledata.json').then(function(resp) {
+				return {data: resp.data, numRecords: resp.data.length};
+			});
+		}
+		return exp;
+	})
+
 	app.controller('ctrl', function ($scope, $state, $stateParams, Restangular) {
 
 
 	})
 
-	app.controller('gridCtrl', function ($scope, $http) {
+	app.controller('gridCtrl', function ($scope, $userRepo) {
 		$scope.noResults = false;
 		$scope.curPage = 0;
 		$scope.pageSize = 5;
@@ -127,7 +142,7 @@
 			if(dir == 'dn') {
 				var newStart = curStartPage - pageRangeSize >=0? curStartPage - pageRangeSize: 0;
 				var newEnd = newStart+pageRangeSize <= numPages? newStart+pageRangeSize: numPages;
-				console.log('prevrange', newStart, newEnd, $scope.curPage);
+//				console.log('prevrange', newStart, newEnd, $scope.curPage);
 				$scope.pages = _.range(newStart, newEnd);
 				if($scope.curPage < newStart || $scope.curPage > newEnd - 1) {
 					$scope.curPage = newStart;
@@ -137,7 +152,7 @@
 			else if(dir == 'up') {
 				var newStart = curStartPage + pageRangeSize <= numPages - pageRangeSize? curStartPage + pageRangeSize: numPages - pageRangeSize;
 				var newEnd = newStart+pageRangeSize <= numPages? newStart+pageRangeSize: numPages;
-				console.log('nextrange', newStart, newEnd, $scope.curPage);
+//				console.log('nextrange', newStart, newEnd, $scope.curPage);
 				$scope.pages = _.range(newStart, newEnd);
 				if($scope.curPage < newStart || $scope.curPage > newEnd - 1) {
 					$scope.curPage = newStart;
@@ -148,6 +163,27 @@
 		}
 
 		var refresh = function() {
+			$userRepo.getAll().then(function (resp) {
+				allUsers = resp.data.map(function (v, i) {
+					v.row = i + 1;
+					if (v.bday)
+						v.bday = new Date(v.bday);
+					return v;
+				});
+				if (allUsers.length == 0) {
+					$scope.noResults = true;
+					setTableMinHeight();
+				}
+				else {
+					$scope.noResults = false;
+					setTableMinHeight();
+					$scope.curPage = 0;
+					getPage();
+					setNumPages();
+					$scope.setPageRange('init');
+				}
+			});
+/*
 			$http.get('tabledata.json').then(function (resp) {
 				allUsers = resp.data.map(function (v, i) {
 					v.row = i + 1;
@@ -168,9 +204,9 @@
 					$scope.setPageRange('init');
 				}
 			});
+*/
 
 		}
-
 
 		var getPage = function() {
 			var start = $scope.pageSize*$scope.curPage;
