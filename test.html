@@ -41,7 +41,7 @@
 			</thead>
 			<tbody>
 			<tr ng-repeat="user in users">
-				<td>{{user.row}}</td>
+				<td>{{user.rownum}}</td>
 				<td>{{user.name}}</td>
 				<td>{{user.age}}</td>
 				<td>{{user.sex}}</td>
@@ -115,7 +115,7 @@
 	})
 
 	app.controller('gridCtrl', function ($scope, $userRepo) {
-		var mode = 'page';
+		var mode = 'all';
 		$scope.noResults = false;
 		$scope.curPage = 0;
 		$scope.pageSize = 5;
@@ -203,7 +203,7 @@
 		}
 
 		var getTableInfoString = function(start, end, totalRecords) {
-			return '' + (start + 1) + ' - ' + end + ' of ' + totalRecords;
+			return '' + (start + 1) + ' - ' + (end > totalRecords? totalRecords: end) + ' of ' + totalRecords;
 		}
 		var getPage = function(init) {
 			var start = $scope.pageSize*$scope.curPage;
