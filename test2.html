@@ -21,34 +21,19 @@
 	<script src="bower_components/angular-ui-router/release/angular-ui-router.js"></script>
 
 	<style>
-		/*
-				body {margin:0px; padding: 0px; box-sizing: border-box; }
-				.box { width: 100px; height: 100px;}
-				.outline { outline: thin solid; outline-offset: -1px;}
-		*/
-		.two {color: blue; font: normal normal normal 14px/1 FontAwesome;}
-		.one {color: red; font-size: 30px;}
-		.two:before {
-			content: 'shit '
-		}
+
+
 	</style>
 </head>
 <body ng-controller="ctrl" class="container-fluid">
 
-<span class="one">
-	<span class="fa fa-star">lala</span>
-</span>
+
 
 <script>
+		var mode = 'all';
+		mode == 'all'? mode = 'page': mode = 'all';
+		console.log(mode)
 
-	$(document).on('myevent', function(e) {
-		//e.cancel = true;
-	})
-	var event = $.Event('myevent');
-	event.cancel = false;
-	$(document).trigger(event);
-	if(event.cancel)
-		console.log('cancelled')
 
 	var app = angular.module('app', ['restangular', 'ui.router']);
 

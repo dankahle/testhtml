@@ -71,6 +71,9 @@
 		<ul class="pagination">
 			<li><a>{{tableInfo}}</a></li>
 		</ul>
+		<ul class="pagination">
+			<li><a href="" ng-click="toggleMode()">{{mode}}</a></li>
+		</ul>
 	</nav>
 </div>
 
@@ -112,13 +115,18 @@
 	})
 
 	app.controller('gridCtrl', function ($scope, $userRepo) {
-		var mode = 'page';
+		var mode = $scope.mode = 'page';
 		$scope.noResults = false;
 		$scope.curPage = 0;
 		$scope.pageSize = 5;
 		var pageRangeSize = 4;
 		var numPages = $scope.numPages = 0;
 		var allUsers = [];
+
+		$scope.toggleMode = function() {
+			mode == 'all'? mode = $scope.mode = 'page': mode = $scope.mode = 'all';
+			refresh();
+		};
 
 		var setTableMinHeight = function() {
 			var tableMinHeight;
@@ -195,7 +203,7 @@
 				});
 			}
 			else {
-				getPage(true);
+				getPage('init');
 			}
 		}
 
