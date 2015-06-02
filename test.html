@@ -50,8 +50,8 @@
 			</tbody>
 		</table>
 	</div>
-	<nav>
-		<ul class="pagination" ng-show="numPages > 1">
+	<nav ng-show="numPages > 1">
+		<ul class="pagination">
 			<li ng-class="{disabled: isFirstPage()}">
 				<a href="#" ng-click="prevPage()" class="arrow" aria-label="Previous"><span class="fa fa-angle-double-left"></span></a>
 			</li>
@@ -68,8 +68,6 @@
 				<a href="#" ng-click="nextPage()" class="arrow" aria-label="Previous"><span class="fa fa-angle-double-right"></span></a>
 			</li>
 		</ul>
-	</nav>
-	<nav>
 		<ul class="pagination">
 			<li><a>{{tableInfo}}</a></li>
 		</ul>
