@@ -231,15 +231,14 @@ todo:
 		}
 
 		$scope.add = function() {
-			if(user.name) { // capitalize each word in name
-				user.name = user.name.split(' ').map(function(v) {
-					v = v.toLowerCase();
-					v[0] = v[0].toUpperCase();
-					return v
+			var newUser = $scope.editUser
+			if(newUser.name) { // capitalize each word in name
+				newUser.name = newUser.name.split(' ').map(function (v) {
+					return v.charAt(0).toUpperCase() + v.slice(1);
 				}).join(' ');
 			}
 
-			$userRepo.add($scope.editUser).then(function(user) {
+			$userRepo.add(newUser).then(function(user) {
 				if(mode == 'all') {
 					allUsers.push(user);
 					if($scope.sortKey)
