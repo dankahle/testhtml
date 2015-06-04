@@ -67,7 +67,8 @@
 				</td>
 				<td><input ng-model="editUser.bday"></td>
 				<td>
-					<a href="" ng-click="cancel()">cancel</a>
+					<a href="" ng-click="cancelEdit()" ng-hide="addMode">cancel</a>
+					<a href="" ng-click="cancelAdd()" ng-show="addMode">cancel</a>
 					<a href="" ng-click="update()" ng-hide="addMode">update</a>
 					<a href="" ng-click="add()" ng-show="addMode">add</a>
 				</td>
