@@ -23,29 +23,30 @@
 	<style>
 
 
+
 	</style>
 </head>
 <body ng-controller="ctrl" class="container-fluid">
-
-
+<button ng-click="click()">click</button><br>
+$location.search() {{$location.search()}}
 
 <script>
-		var mode = 'all';
-		mode == 'all'? mode = 'page': mode = 'all';
-		console.log(mode)
+
 
 
 	var app = angular.module('app', ['restangular', 'ui.router']);
 
 
-	app.config(function (RestangularProvider, $stateProvider, $urlRouterProvider) {
-		RestangularProvider.setBaseUrl('http://localhost:3000/api');
-
-
+	app.run(function ($rootScope, $location) {
+		$rootScope.$location = $location;
+	})
+	app.config(function(RestangularProvider, $stateProvider, $urlRouterProvider) {
 	})
 
-	app.controller('ctrl', function ($scope, $state, $stateParams, Restangular) {
-		$scope.curPage = 0;
+	app.controller('ctrl', function ($scope, $state, $stateParams, Restangular, $location) {
+		$scope.click = function() {
+			window.location.search = '?stuff=lala';
+		}
 	})
 </script>
 </body>

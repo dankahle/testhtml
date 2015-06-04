@@ -26,7 +26,7 @@
 <div class="dk-grid" ng-cloak ng-controller="gridCtrl">
 	<div class="table-wrapper">
 		<div class="no-results" ng-show="noResults">No results</div>
-		<table class="table" ng-hide="noResults">
+		<table class="table dk-table" ng-hide="noResults">
 			<thead>
 			<th></th>
 			<th ng-repeat="header in headers">
@@ -42,14 +42,40 @@
 			<tbody>
 			<tr ng-repeat="user in users">
 				<td>{{user.rownum}}</td>
-				<td>{{user.name}}</td>
-				<td>{{user.age}}</td>
-				<td>{{user.sex}}</td>
-				<td>{{moment(user.bday).format('L')}}</td>
+				<td><span>{{user.name}}</span></td>
+				<td><span>{{user.age}}</span> </td>
+				<td><span>{{user.sex}}</span></td>
+				<td><span>{{moment(user.bday).format('L')}}</span></td>
+				<td>
+					<a href="" ng-click="edit($index, user)">edit</a>
+					<a href="" ng-click="remove($index, user)">delete</a>
+				</td>
+			</tr>
+			<tr class="add-link-row">
+				<td colspan="6"><a href="" ng-click="showAddRow()">New User</a><br></td>
+			</tr>
+			<tr class="edit-row" style="display:none">
+				<td>{{editUser.rownum}}</td>
+				<td><input ng-model="editUser.name"></td>
+				<td><input ng-model="editUser.age"></td>
+				<td>
+					<select ng-model="editUser.sex">
+						<option value=""></option>
+						<option value="M">Male</option>
+						<option value="F">Female</option>
+					</select>
+				</td>
+				<td><input ng-model="editUser.bday"></td>
+				<td>
+					<a href="" ng-click="cancel()">cancel</a>
+					<a href="" ng-click="update()" ng-hide="addMode">update</a>
+					<a href="" ng-click="add()" ng-show="addMode">add</a>
+				</td>
 			</tr>
 			</tbody>
 		</table>
 	</div>
+
 	<nav ng-show="numPages > 1">
 		<ul class="pagination">
 			<li ng-class="{disabled: isFirstPage()}">
@@ -105,25 +131,131 @@
 				.then(function(resp) {
 					return resp.data;
 				});
+		};
+
+		exp.add = function(user) {
+			return $http.post(baseUrl, user)
+				.then(function(resp) {
+					return resp.data;
+				})
 		}
+
+		exp.update = function(user) {
+			return $http.put(baseUrl + '/' + user._id, user)
+				.then(function(resp) {
+					return resp.data;
+				})
+		}
+
+		exp.remove = function(user) {
+			return $http.delete(baseUrl + '/' + user._id);
+		};
 
 		return exp;
 	})
-
+/*
+todo:
+* delete needs to stay on same page, but might not be there after delete. What to do?
+ */
 	app.controller('ctrl', function ($scope, $state, $stateParams, Restangular) {
 
 	})
 
 	app.controller('gridCtrl', function ($scope, $userRepo) {
-		var mode = $scope.mode = 'page';
+		var mode = $scope.mode = 'all';
 		$scope.noResults = false;
 		$scope.curPage = 0;
 		$scope.pageSize = 5;
-		var pageRangeSize = 4;
-		var numPages = $scope.numPages = 0;
-		var allUsers = [];
+		$scope.addMode = $scope.editMode = false;
+		var pageRangeSize = 4,
+			numPages = $scope.numPages = 0,
+			allUsers = [],
+			$trCurEdit, editUser,
+			$trAddLink = $('.dk-table tr.add-link-row'),
+			$trAddOrEdit = $('.dk-table tr.edit-row');
+
+		function clearEditModes() {
+			if($scope.editMode)
+				$scope.cancelEdit();
+			if($scope.addMode)
+				$scope.cancelAdd();
+		}
+
+		$scope.showAddRow = function() {
+			clearEditModes();
+			$scope.addMode = true;
+			$scope.editUser = {};
+			$trAddLink.hide();
+			$trAddOrEdit.show();
+			$trAddOrEdit.find('td:nth-child(2) input').focus();
+		};
+
+		$scope.remove = function($index, user) {
+			$userRepo.remove(user).then(function() {
+				if(mode == 'all')
+					_.remove(allUsers, user);
+				getPage();
+			})
+		}
+
+		$scope.edit = function(index, user) {
+			clearEditModes();
+			$scope.editMode = true;
+			editUser = user;
+			$scope.editUser = _.clone(editUser, true);
+			$trCurEdit = $('.dk-table tr:nth-of-type(' + (index+1) + ')');
+			$trAddOrEdit.show().insertAfter($trCurEdit.hide());
+		}
+
+		$scope.cancelEdit = function() {
+			$('.dk-table tbody').append($trAddOrEdit.hide());
+			$trCurEdit.show();
+			$scope.editMode = false;
+		}
+
+		$scope.update = function() {
+			_.extend(editUser, $scope.editUser);// keep same object so it updates allUsers as well
+			$userRepo.update(editUser).then(function() {
+				$('.dk-table tbody').append($trAddOrEdit.hide());
+				$trCurEdit.show();
+				$scope.editMode = false;
+			}, function(err) {
+				$scope.editMode = false;
+			})
+		}
+
+		$scope.cancelAdd = function() {
+			$trAddOrEdit.hide();
+			$trAddLink.show();
+			$scope.addMode = false;
+		}
+
+		$scope.add = function() {
+			if(user.name) { // capitalize each word in name
+				user.name = user.name.split(' ').map(function(v) {
+					v = v.toLowerCase();
+					v[0] = v[0].toUpperCase();
+					return v
+				}).join(' ');
+			}
+
+			$userRepo.add($scope.editUser).then(function(user) {
+				if(mode == 'all') {
+					allUsers.push(user);
+					if($scope.sortKey)
+						allUsers.sort(getSortFcn($scope.sortKey))
+				}
+				$trAddOrEdit.hide();
+				$trAddLink.show();
+				$scope.addMode = false;
+				getPage();
+			}, function(err) {
+				$scope.addMode = false;
+			})
+		}
 
 		$scope.toggleMode = function() {
+			clearEditModes();
 			mode == 'all'? mode = $scope.mode = 'page': mode = $scope.mode = 'all';
 			refresh();
 		};
@@ -139,6 +271,7 @@
 		}
 
 		$scope.setPageRange = function(dir, changePage) {
+			clearEditModes();
 			var calcMaxPage = ($scope.curPage+1)*pageRangeSize;
 			var nextMaxPage =  calcMaxPage > numPages? numPages: calcMaxPage;
 			if(dir == 'init') {
@@ -183,6 +316,7 @@
 		}
 
 		var refresh = function() {
+			clearEditModes();
 			if(mode == 'all') {
 				$userRepo.getAll().then(function (resp) {
 					allUsers = mapData(resp.data);
@@ -245,6 +379,7 @@
 
 		var lastSortName, lastSortKey;
 		$scope.sort = function (sortName) {
+			clearEditModes();
 			if (sortName == lastSortName) {
 				if (lastSortKey.substr(-3) == '-up') {
 					lastSortKey = sortName + '-dn';
@@ -262,14 +397,15 @@
 			}
 
 			if(mode == 'all') {
-				var sortFcn = getSortFcn(sortName == 'bday' ? 'date' : '', $scope.sortKey);
-				allUsers.sort(sortFcn)
+				allUsers.sort(getSortFcn($scope.sortKey))
 				$scope.curPage = 0;
 				getPage()
 				$scope.setPageRange('init');
 			}
 			else {
-				getPage();
+				$scope.curPage = 0;
+				getPage()
+				$scope.setPageRange('init');
 			}
 		};
 
@@ -289,6 +425,7 @@
 		}
 
 		$scope.prevPage = function(){
+			clearEditModes();
 			if($scope.isFirstPage())
 				return;
 			var lastCurPage = $scope.curPage;
@@ -298,6 +435,7 @@
 			getPage();
 		}
 		$scope.nextPage = function(){
+			clearEditModes();
 			if($scope.isLastPage())
 				return;
 			var lastCurPage = $scope.curPage;
@@ -321,55 +459,67 @@
 			{name: 'bday', title: 'Birthday'}
 		]
 
+		function getSortFcnType() {
+			var keyName = $scope.sortKey.substring(0, $scope.sortKey.length - 3);
+			if(keyName == 'bday')
+				return 'date';
+			else
+				return '';
+		}
+
+		function getSortFcn(key) {
+			var direction = key.substr(-2) == 'up' ? 'up' : 'dn';
+			var prop = key.substring(0, key.length - 3);
+			if (getSortFcnType(key) == 'date') {
+				if (direction == 'up') {
+					return function (a, b) {
+						var ap = a['' + prop] ? a[prop].getTime() : 0;
+						var bp = b[prop] ? b[prop].getTime() : 0;
+						if (ap < bp) return -1;
+						if (ap > bp) return 1;
+						return 0;
+					}
+				}
+				else {
+					return function (a, b) {
+						var ap = a['' + prop] ? a[prop].getTime() : 0;
+						var bp = b[prop] ? b[prop].getTime() : 0;
+						if (ap > bp) return -1;
+						if (ap < bp) return 1;
+						return 0;
+					}
+				}
+			}
+			else {
+				if (direction == 'up') {
+					return function (a, b) {
+						var ap = a[prop];
+						var bp = b[prop];
+						ap = typeof(ap) == 'string'? ap.toLowerCase(): ap;
+						bp = typeof(bp) == 'string'? bp.toLowerCase(): bp;
+						if (ap < bp) return -1;
+						if (ap > bp) return 1;
+						return 0;
+					}
+				}
+				else {
+					return function (a, b) {
+						var ap = a[prop];
+						var bp = b[prop];
+						ap = typeof(ap) == 'string'? ap.toLowerCase(): ap;
+						bp = typeof(bp) == 'string'? bp.toLowerCase(): bp;
+						if (ap > bp) return -1;
+						if (ap < bp) return 1;
+						return 0;
+					}
+				}
+			}
+		}
 
 		refresh();
 
 	})
 
-	function getSortFcn(type, key) {
-		var direction = key.substr(-2) == 'up' ? 'up' : 'dn';
-		var prop = key.substring(0, key.length - 3);
-		if (type == 'date') {
-			if (direction == 'up') {
-				return function (a, b) {
-					var ap = a['' + prop] ? a[prop].getTime() : 0;
-					var bp = b[prop] ? b[prop].getTime() : 0;
-					if (ap < bp) return -1;
-					if (ap > bp) return 1;
-					return 0;
-				}
-			}
-			else {
-				return function (a, b) {
-					var ap = a['' + prop] ? a[prop].getTime() : 0;
-					var bp = b[prop] ? b[prop].getTime() : 0;
-					if (ap > bp) return -1;
-					if (ap < bp) return 1;
-					return 0;
-				}
-			}
-		}
-		else {
-			if (direction == 'up') {
-				return function (a, b) {
-					var ap = a[prop];
-					var bp = b[prop];
-					if (ap < bp) return -1;
-					if (ap > bp) return 1;
-					return 0;
-				}
-			}
-			else {
-				return function (a, b) {
-					var ap = a[prop];
-					var bp = b[prop];
-					if (ap > bp) return -1;
-					if (ap < bp) return 1;
-					return 0;
-				}
-			}
-		}
-	}
 
 </script>
 </body>
