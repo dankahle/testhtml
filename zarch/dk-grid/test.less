@@ -1,0 +1,93 @@
+//@import (reference) '../bower_components/bootstrap/less/bootstrap';
+//@import (reference) 'extra';
+
+.outline() {
+  outline: thin solid;
+  outline-offset: -1px;
+}
+
+.clearfix() {
+  &:before,
+  &:after {
+    content: " "; // 1
+    display: table; // 2
+  }
+  &:after {
+    clear: both;
+  }
+}
+
+//////////////////////////////////////////
+
+.dk-grid {
+
+  .no-results {
+    border-top: 2px solid;
+    margin: 20px 0px;
+    padding-top: 20px;
+  }
+  table {
+    th span.sort-direction {
+      display: inline-block;
+      font-size: 19px;
+      line-height: .5em;
+      width: 13px;
+      margin-left: 5px;
+      position: relative;
+      top: 1px;
+    }
+  }
+
+  nav {
+    display: inline-block;
+    + nav {
+      margin-left: 4px;
+    }
+  }
+  .pagination {
+    margin-top: 0;
+    a.arrow {
+      padding: 6px 10px;
+      span {
+        font-size: 17px;
+      }
+    }
+    a.page-range {
+      padding: 6px 8px;
+      span {
+        line-height: .5;
+        position: relative;
+        top: -3px;
+        font-size: 16px;
+      }
+    }
+  }
+}
+.dk-edit-dlg-backdrop {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 1000;
+}
+.dk-edit-dlg {
+  z-index: 1010;
+  background: white;
+  padding: 20px 40px;
+  position:fixed;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  box-shadow: 0 0 5px black;
+  .dk-edit-dlg-title {
+    text-align: center;
+    margin-top: 0;
+    margin-bottom: 23px;
+  }
+  .dk-edit-dlg-button {
+    float: right;
+    margin-left: 11px;
+    margin-top: 4px;
+  }
+}

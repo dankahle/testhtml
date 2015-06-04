@@ -4,20 +4,20 @@
 	<title>test</title>
 	<meta charset="UTF-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge"/>
-	<!--<script src="bower_components/modernizr/modernizr.js"></script>-->
+	<!--<script src="../../bower_components/modernizr/modernizr.js"></script>-->
 	<!--<base href="https://developer.mozilla.org/samples/cssref/">-->
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-	<link rel="stylesheet" href="bower_components/bootstrap/less/bootstrap.css">
-	<link rel="stylesheet" href="bower_components/font-awesome/css/font-awesome.css">
-	<link rel="stylesheet" href="less/test.css">
-	<script src="bower_components/lodash/lodash.js"></script>
-	<script src="bower_components/moment/moment.js"></script>
-	<script src="bower_components/jquery/dist/jquery.js"></script>
-	<script src="bower_components/bootstrap/dist/js/bootstrap.js"></script>
-	<script src="bower_components/angular/angular.js"></script>
-	<script src="bower_components/angular-animate/angular-animate.js"></script>
-	<script src="bower_components/restangular/dist/restangular.js"></script>
-	<script src="bower_components/angular-ui-router/release/angular-ui-router.js"></script>
+	<link rel="stylesheet" href="../../bower_components/bootstrap/less/bootstrap.css">
+	<link rel="stylesheet" href="../../bower_components/font-awesome/css/font-awesome.css">
+	<link rel="stylesheet" href="test.css">
+	<script src="../../bower_components/lodash/lodash.js"></script>
+	<script src="../../bower_components/moment/moment.js"></script>
+	<script src="../../bower_components/jquery/dist/jquery.js"></script>
+	<script src="../../bower_components/bootstrap/dist/js/bootstrap.js"></script>
+	<script src="../../bower_components/angular/angular.js"></script>
+	<script src="../../bower_components/angular-animate/angular-animate.js"></script>
+	<script src="../../bower_components/restangular/dist/restangular.js"></script>
+	<script src="../../bower_components/angular-ui-router/release/angular-ui-router.js"></script>
 	<style>
 	</style>
 </head>
@@ -98,10 +98,13 @@
 		<ul class="pagination">
 			<li><a>{{tableInfo}}</a></li>
 		</ul>
+	</nav>
+	<nav>
 		<ul class="pagination">
 			<li><a href="" ng-click="toggleMode()">{{mode}}</a></li>
 			<li><a href="" ng-click="toggleUsingEditDlg()">dlg: {{usingEditDlg}}</a></li>
 		</ul>
+
 	</nav>
 
 	<div class="dk-edit-dlg-backdrop" style="display:none;"></div>
@@ -459,6 +462,7 @@ todo:
 		var getTableInfoString = function(start, end, totalRecords) {
 			return '' + (start + 1) + ' - ' + (end > totalRecords? totalRecords: end) + ' of ' + totalRecords;
 		}
+
 		var getPage = function(init) {
 			var start = $scope.pageSize*$scope.curPage;
 			var end = $scope.pageSize*($scope.curPage+1);
