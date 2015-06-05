@@ -28,6 +28,14 @@
 </head>
 <body ng-controller="ctrl" class="container-fluid">
 
+main name: {{name}}<br>
+<div outer>
+	transclude name: {{name}}<br>
+	<div inner>
+		inner name: {{name}}
+	</div>
+</div>
+
 <script>
 
 
@@ -39,10 +47,36 @@
 	})
 	app.config(function(RestangularProvider, $stateProvider, $urlRouterProvider) {
 	})
+	app.directive('outer', function() {
+		return {
+			scope: true,
+			transclude: true,
+			template: 'outer name: {{name}}<br><div ng-transclude></div>',
+			link: function($scope, elem, attr) {
+				$scope.name = 'outer';
+
+			}
+		}
+	})
+	app.directive('inner', function() {
+		return {
+			scope: true,
+			link: function($scope, elem, attr) {
+				$scope.name = 'inner';
+				$scope.$on('refresh', function() {
+					console.log('refresh3');
+				})
+
+			}
+		}
+	})
+
+
 
 	app.controller('ctrl', function ($scope, $state, $stateParams, Restangular, $location) {
+		//$scope.name = 'main';
 		$scope.click = function() {
-			window.location.search = '?stuff=lala';
+			$scope.$broadcast('refresh');
 		}
 	})
 </script>

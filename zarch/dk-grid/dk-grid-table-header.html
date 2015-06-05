@@ -1,0 +1,9 @@
+<th ng-repeat="header in dkGridHeaders">
+	<a href="" ng-click="sort(header.name)">
+		{{header.title}}
+				<span class="sort-direction">
+					<span ng-show="sortKey == '{{header.name}}-up'" class="fa fa-angle-up"></span>
+					<span ng-show="sortKey == '{{header.name}}-dn'" class="fa fa-angle-down"></span>
+				</span>
+	</a>
+</th>

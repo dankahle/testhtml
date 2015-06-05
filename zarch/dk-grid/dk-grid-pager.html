@@ -1,0 +1,26 @@
+<nav ng-show="numPages > 1">
+	<ul class="pagination">
+		<li ng-class="{disabled: isFirstPage()}">
+			<a href="#" ng-click="prevPage()" class="arrow" aria-label="Previous"><span class="fa fa-angle-double-left"></span></a>
+		</li>
+		<li ng-hide="isFirstRange()">
+			<a class="page-range" href="#" ng-click="setPageRange('dn')"><span>...</span></a>
+		</li>
+		<li ng-repeat="page in pages" ng-class="{active: curPage == page}">
+			<a href="#" ng-click="setPage(page)">{{page+1}}</a>
+		</li>
+		<li ng-hide="isLastRange()">
+			<a class="page-range" href="#" ng-click="setPageRange('up')"><span>...</span></a>
+		</li>
+		<li ng-class="{disabled: isLastPage()}">
+			<a href="#" ng-click="nextPage()" class="arrow" aria-label="Previous"><span class="fa fa-angle-double-right"></span></a>
+		</li>
+	</ul>
+	<ul class="pagination">
+		<li><a>{{tableInfo}}</a></li>
+	</ul>
+	<ul class="pagination">
+		<li><a href="" ng-click="toggleMode()">{{mode}}</a></li>
+		<li><a href="" ng-click="toggleUsingEditDlg()">dlg: {{usingEditDlg}}</a></li>
+	</ul>
+</nav>
