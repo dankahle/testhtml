@@ -216,8 +216,8 @@ angular.module('dkGrid', [])
 				var refresh = function() {
 					clearEditModes();
 					if(mode == 'all') {
-						dkGridRepo.getAll().then(function (resp) {
-							allItems = mapData(resp.data);
+						dkGridRepo.getAll().then(function (data) {
+							allItems = mapData(data);
 
 							if (allItems.length == 0) {
 								$scope.noResults = true;
@@ -254,11 +254,12 @@ angular.module('dkGrid', [])
 						if(init)
 							$scope.sortKey = undefined;
 
-						dkGridRepo.getPage($scope.curPage + 1, $scope.pageSize, $scope.sortKey).then(function(resp) {
-							$scope.items = mapData(resp.data);
-							$scope.tableInfo = getTableInfoString(start, end, resp.numRecords);
+						dkGridRepo.getPage($scope.curPage + 1, $scope.pageSize, $scope.sortKey)
+							.then(function(data) {
+							$scope.items = mapData(data.data);
+							$scope.tableInfo = getTableInfoString(start, end, data.numRecords);
 
-							if (resp.numRecords == 0) {
+							if (data.numRecords == 0) {
 								$scope.noResults = true;
 								setTableMinHeight();
 							}
@@ -267,7 +268,7 @@ angular.module('dkGrid', [])
 								setTableMinHeight();
 								if(init)
 									$scope.curPage = 0;
-								numPages = $scope.numPages = Math.ceil(resp.numRecords / $scope.pageSize);
+								numPages = $scope.numPages = Math.ceil(data.numRecords / $scope.pageSize);
 								if(init)
 									$scope.setPageRange('init');
 							}

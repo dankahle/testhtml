@@ -5,7 +5,9 @@ angular.module('app')
 	var exp = {};
 
 	exp.getAll = function () {
-		return $http.get(baseUrl);
+		return $http.get(baseUrl).then(function (resp) {
+			return resp.data;
+		});
 	};
 
 	exp.getPage = function (pageNo, pageSize, sortKey) {
