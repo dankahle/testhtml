@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html ng-app='app'>
+<head lang="en">
+	<title>test</title>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+	<!--<script src="bower_components/modernizr/modernizr.js"></script>-->
+	<!--<base href="https://developer.mozilla.org/samples/cssref/">-->
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+	<link rel="stylesheet" href="bower_components/bootstrap/less/bootstrap.css">
+	<link rel="stylesheet" href="bower_components/font-awesome/css/font-awesome.css">
+	<link rel="stylesheet" href="less/test.css">
+	<script src="bower_components/lodash/lodash.js"></script>
+	<script src="bower_components/jquery/dist/jquery.js"></script>
+	<script src="bower_components/bootstrap/dist/js/bootstrap.js"></script>
+	<script src="bower_components/angular/angular.js"></script>
+	<script src="bower_components/angular-animate/angular-animate.js"></script>
+	<script src="bower_components/restangular/dist/restangular.js"></script>
+	<script src="bower_components/angular-ui-router/release/angular-ui-router.js"></script>
+	<style>
+	</style>
+</head>
+<body ng-controller="ctrl" class="container-fluid">
+
+<div class="row">
+	<header>
+		<div class="col-sm-offset-9 col-sm-3">
+			<header>header</header>
+		</div>
+	</header>
+</div>
+
+
+<div class="row main-content">
+
+	<div class="col-sm-3">
+		<ul class="list-unstyled">
+			<li ng-repeat="nav in navs" ng-class="{active: $state.includes(nav.state)}">
+				<a ui-sref="{{nav.state}}">{{nav.name}}</a>
+			</li>
+		</ul>
+		$stateParams: {{$stateParams}}
+	</div>
+
+	<main class="col-sm-9 col-md-6">
+		<ui-view></ui-view>
+	</main>
+</div>
+
+<div class="row">
+	<footer>footer</footer>
+</div>
+
+<script>
+	var app = angular.module('app', ['restangular', 'ui.router', 'ngAnimate']);
+	app.run(function (Restangular, $state, $stateParams, $rootScope, $location) {
+		Restangular.setErrorInterceptor(function (response, deferred, responseHandler) {
+			console.log('error:', response)
+			return true;
+		});
+
+		$rootScope.$state = $state;
+		$rootScope.$stateParams = $stateParams;
+		$rootScope.$location = $location;
+		$rootScope.log = console.log.bind(console);
+
+		$rootScope.$on('$stateChangeError', function (event, to, top, from, fromp, error) {
+			console.log(error.stack);
+		})
+		$rootScope.$on('$stateChangeSuccess', function (event, to, top, from, fromp, error) {
+			console.log('>> ' + to.name);
+		})
+	})
+	app.config(function (RestangularProvider, $stateProvider, $urlRouterProvider) {
+		RestangularProvider.setBaseUrl('http://localhost:3000/api');
+
+		$urlRouterProvider.otherwise('/');
+		$stateProvider
+			.state('home', {
+				url: '/',
+				template: 'home'
+			})
+			.state('search', {
+				url: '/search',
+				templateUrl: 'search.html',
+				controller: 'searchCtrl'
+			})
+			.state('results', {
+				url: '/results?name&minAge',
+				templateUrl: 'results.html',
+				resolve: {
+					users: function($stateParams, userRepo) {
+						return userRepo.getUsers($stateParams.name, $stateParams.minAge);
+					}
+				},
+				controller: 'resultsCtrl'
+			})
+	});
+
+	app.factory('userRepo', function(Restangular) {
+		return {
+			getUsers: function(name, minAge) {
+				return Restangular.all('users').getList({name: name, minAge: minAge});
+			}
+		}
+	})
+
+	app.controller('ctrl', function ($scope, $state, $stateParams, Restangular) {
+
+		$scope.navs = [
+			{state: 'home', name: 'Home'},
+			{state: 'search', name: 'Search'}
+		]
+
+	})
+	app.controller('searchCtrl', function ($scope, $state, $stateParams, Restangular) {
+		$scope.name = 'dank';
+		$scope.minAge = '50';
+	})
+	app.controller('resultsCtrl', function ($scope, users) {
+
+		$scope.users = users;
+
+	})
+</script>
+<script type="text/ng-template" id="search.html">
+	name: <input ng-model="name"><br>
+	age: <input ng-model="minAge"><br>
+	<a ui-sref="results({name: name, minAge: minAge})" class="btn btn-default">Search</a>
+</script>
+<script type="text/ng-template" id="results.html">
+	results<br>
+	name: {{$stateParams.name}}<br>
+	minAge: {{$stateParams.minAge}}<br>
+	<table class="table">
+		<thead>
+		<tr>
+			<th>Name</th><th>Age</th><th>sex</th>
+		</tr>
+		</thead>
+		<tbody>
+		<tr ng-repeat="user in users">
+			<td>{{user.name}}</td>
+			<td>{{user.age}}</td>
+			<td>{{user.sex}}</td>
+		</tr>
+		</tbody>
+	</table>
+
+</script>
+</body>
+</html>

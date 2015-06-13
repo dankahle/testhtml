@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html ng-app='app'>
+<head lang="en">
+	<title>trNgGrid</title>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+	<!--<script src="../../bower_components/modernizr/modernizr.js"></script>-->
+	<!--<base href="https://developer.mozilla.org/samples/cssref/">-->
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+	<link rel="stylesheet" href="../../bower_components/bootstrap/less/bootstrap.css">
+	<link rel="stylesheet" href="../../bower_components/font-awesome/css/font-awesome.css">
+	<link rel="stylesheet" href="../../bower_components/tr-ng-grid/trNgGrid.css">
+	<link rel="stylesheet" href="trNgGrid.css">
+	<script src="../../bower_components/lodash/lodash.js"></script>
+	<script src="../../bower_components/moment/moment.js"></script>
+	<script src="../../bower_components/jquery/dist/jquery.js"></script>
+	<script src="../../bower_components/bootstrap/dist/js/bootstrap.js"></script>
+	<script src="../../bower_components/angular/angular.js"></script>
+	<script src="../../bower_components/angular-animate/angular-animate.js"></script>
+	<script src="../../bower_components/restangular/dist/restangular.js"></script>
+	<script src="../../bower_components/angular-ui-router/release/angular-ui-router.js"></script>
+	<script src="../../bower_components/tr-ng-grid/trNgGrid.js"></script>
+	<script src="trNgGrid.js"></script>
+	<script src="userRepo.js"></script>
+	<style>
+	</style>
+</head>
+<body ng-controller="ctrl" class="container-fluid">
+
+
+	<table track-table  class=""  tr-ng-grid items="users" selected-items="selItems" page-items="4" enable-sorting="true" selection-mode="SingleRow" total-items="totalItems", on-data-required="getPage(currentPage, pageItems, filterBy, filterByFields, orderBy, orderByReverse)" order-by="orderBy" order-by-reverse="orderByReverse" current-page="curPage">
+		<thead>
+		<tr>
+			<th field-name="rownum" display-format="number:2"></th>
+			<th field-name="name"></th>
+			<th field-name="age"></th>
+		</tr>
+		</thead>
+		<tbody>
+		<tr>
+			<td field-name="name"><div>{{gridItem.name + gridItem.age}} <a href="" ng-click="changeName(gridItem)">change</a> </div></td>
+		</tr>
+		</tbody>
+	</table>
+curPage: {{curPage}}<br>
+	orderBy: {{orderBy}}<br>
+	orderByReverse: {{orderByReverse}}<br>
+
+
+</body>
+</html>

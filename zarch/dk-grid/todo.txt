@@ -1,0 +1,3 @@
+
+
+after delete, should stay on same page, but... might not have that page anymore, so delete needs to return num records so you can recalc page count and change page if required.

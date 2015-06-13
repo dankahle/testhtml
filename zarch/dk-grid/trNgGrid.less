@@ -1,0 +1,46 @@
+//@import (reference) '../bower_components/bootstrap/less/bootstrap';
+//@import (reference) 'extra';
+
+.outline {
+  outline: thin solid;
+  outline-offset: -1px;
+}
+
+.clearfix {
+  &:before,
+  &:after {
+    content: " "; // 1
+    display: table; // 2
+  }
+  &:after {
+    clear: both;
+  }
+}
+
+/*
+html { height: 100%; }
+*/
+
+/*
+body {
+  min-height: 100%;
+  padding: 0;
+  margin: 0;
+  .outline;
+  outline-color: red;
+}
+*/
+
+/////////////////////
+
+.outer {
+  display:table;
+  width: 100%;
+}
+
+.wrapper {
+  width: 50%;
+  display: table-cell;
+  .outline;
+  vertical-align: top;
+}

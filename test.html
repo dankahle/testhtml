@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html ng-app='app'>
+<head lang="en">
+	<meta charset="UTF-8">
+	<!--<meta name="viewport" content="width=device-width, initial-scale=1.0" />-->
+	<title>test</title>
+	<link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.css">
+	<link rel="stylesheet" href="bower_components/font-awesome/css/font-awesome.css">
+	<link rel="stylesheet" href="bower_components/tr-ng-grid/trNgGrid.css">
+	<link rel="stylesheet" href="bower_components/angular-xeditable/dist/css/xeditable.css">
+	<link rel="stylesheet" href="less/test.css">
+	<script src="bower_components/lodash/lodash.js"></script>
+	<script src="bower_components/jquery/dist/jquery.js"></script>
+	<script src="bower_components/bootstrap/dist/js/bootstrap.js"></script>
+	<script src="bower_components/angular/angular.js"></script>
+	<script src="bower_components/angular-ui-router/release/angular-ui-router.js"></script>
+	<script src="bower_components/ui-router-extras/release/ct-ui-router-extras.js"></script>
+	<script src="bower_components/restangular/dist/restangular.js"></script>
+	<script src="bower_components/tr-ng-grid/trNgGrid.js"></script>
+	<script src="bower_components/angular-xeditable/dist/js/xeditable.js"></script>
+<style>
+</style>
+</head>
+<body ng-controller="ctrl">
+
+<div ng-form name="myform">
+	name: <input ng-model="name" required><br>
+	age: <input ng-model="age"><br>
+</div>
+myform.$valid: {{myform.$valid}}<br>
+myform.$errors: {{myform.$valid}}<br>
+
+<span editable-text="user.name" onbeforesave="validate($data)" onaftersave="save()">
+    {{ user.name || 'empty' }}
+  </span>
+
+
+<script>
+
+	var app = angular.module('app', ['restangular', 'ui.router', 'ct.ui.router.extras.sticky', 'ct.ui.router.extras.dsr', 'trNgGrid', 'xeditable']);
+	app.run(function(editableOptions, editableThemes) {
+		editableOptions.theme = 'bs3';
+		editableThemes.bs3.inputClass = 'input-sm';
+		editableThemes.bs3.buttonsClass = 'btn-sm';
+	})
+
+
+
+
+	app.controller('ctrl', function($scope, $q, $timeout, $filter){
+		var log = $scope.log = console.log.bind(console);
+
+		$scope.user = {name: 'dank'}
+
+		$scope.validate = function(val) {
+			var def = $q.defer();
+			$timeout(function() {
+				val == 'dank'? def.resolve(true): def.reject('Name needs to be dank.');
+			}, 1000)
+			return def.promise;
+		}
+
+		$scope.save = function() {
+			return $q.reject({error: 'something wrong'})
+				.then(function() {
+					return true;
+				}, function(err) {
+					return $q.reject(err.error);
+				})
+		}
+
+		$scope.arr = [
+			{name: 'dank', age: '50'},
+			{name: 'carl', age: '60'},
+		]
+
+	})
+
+
+</script>
+</body>
+</html>
