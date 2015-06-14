@@ -23,7 +23,13 @@
 </head>
 <body ng-controller="ctrl">
 
-<div ng-form name="myform">
+<ul>
+	<li ng-repeat="val in [4,5,6]">{{val}}</li>
+</ul>
+
+
+
+<div ng-form editable-form name="myform">
 	name: <input ng-model="name" required><br>
 	age: <input ng-model="age"><br>
 </div>
@@ -36,7 +42,6 @@ myform.$errors: {{myform.$valid}}<br>
 
 
 <script>
-
 	var app = angular.module('app', ['restangular', 'ui.router', 'ct.ui.router.extras.sticky', 'ct.ui.router.extras.dsr', 'trNgGrid', 'xeditable']);
 	app.run(function(editableOptions, editableThemes) {
 		editableOptions.theme = 'bs3';
@@ -73,6 +78,8 @@ myform.$errors: {{myform.$valid}}<br>
 			{name: 'dank', age: '50'},
 			{name: 'carl', age: '60'},
 		]
+
+		console.log(_.find($scope.arr, {name: 'dank'}))
 
 	})
 

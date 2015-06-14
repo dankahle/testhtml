@@ -1,5 +1,5 @@
 
-var app = angular.module('app', ['restangular', 'ui.router', 'ngAnimate', 'trNgGrid']);
+var app = angular.module('app', ['restangular', 'ui.router', 'ngAnimate', 'trNgGrid', 'xeditable']);
 
 app.config(function (RestangularProvider, $stateProvider, $urlRouterProvider) {
 	RestangularProvider.setBaseUrl('http://localhost:3000/api');
@@ -13,6 +13,11 @@ app.run(function ($rootScope, $templateCache) {
 
 
 });
+app.run(function(editableOptions, editableThemes) {
+	editableOptions.theme = 'bs3';
+	editableThemes.bs3.inputClass = 'input-sm';
+	editableThemes.bs3.buttonsClass = 'btn-sm';
+})
 
 app.directive('stdDate', function () {
 	return {
@@ -78,7 +83,6 @@ app.directive('trackTable', function($location) {
 				$scope.orderBy = search.sortKey.substr(0, search.sortKey.length - 3);
 				$scope.orderByReverse = search.sortKey.substr(-2) == 'up'? false: true;
 			}
-			console.log('set', $scope)
 
 		}
 	}
@@ -89,19 +93,72 @@ app.directive('trackTable', function($location) {
  * delete needs to stay on same page, but might not be there after delete. What to do?
  */
 
-app.controller('ctrl', function ($scope, userRepo) {
+app.controller('ctrl', function ($scope, userRepo, $timeout) {
+	var lastGetPage,
+		mode = 'page';
+
 	$scope.dkGridRepo = userRepo;
 	$scope.filters  = {name: 't', age: 31};
 
-/*
-	userRepo.getAll().then(function(users) {
-		$scope.users = users;
-	});
-*/
 
+	$scope.removeUser = function(item) {
+		return userRepo.remove(item).then(function() {
+			if(mode == 'all')
+				$scope.users.splice($scope.users.indexOf(item), 1);
+			else
+				refresh();
+		})
 
+	}
+
+	$scope.addUser = function() {
+		$scope.inserted = {
+			name: '',
+			age: ''
+		}
+		$scope.users.push($scope.inserted);
+	}
+
+	$scope.saveUser = function(formData, item) {
+		console.log('saveUser', formData)
+		if(item._id)
+			return userRepo.update(_.extend(item, formData));
+		else
+			return userRepo.add(_.extend(item, formData))
+				.then(function(newVal) {
+					$('table tbody tr:last-Child').remove();
+					$timeout(function() {
+						refresh();
+					})
+					return newVal;
+				});
+	}
+
+	$scope.checkName = function(name, item) {
+		//console.log('checkName', name, item)
+	}
+
+	$scope.checkAge = function(age, item) {
+		//console.log('checkage', age, item)
+	}
+
+	function refresh() {
+		if(mode == 'all') {
+			console.log('refresh all')
+			userRepo.getAll().then(function(users) {
+				$scope.users = users;
+			});
+		}
+		else {
+			console.log('refresh page')
+			$scope.getPage.apply($scope, lastGetPage);
+		}
+
+	}
 
 	$scope.getPage = function(currentPage, pageItems, filterBy, filterByFields, orderBy, orderByReverse) {
+		lastGetPage = Array.prototype.slice.call(arguments);
+		console.log(lastGetPage)
 		$scope.users = [];
 		var sortKey;
 		if(orderBy && orderByReverse)
@@ -126,4 +183,6 @@ app.controller('ctrl', function ($scope, userRepo) {
 		item.name += 'lala';
 	}
 
+	if(mode == 'all')
+		refresh();
 })

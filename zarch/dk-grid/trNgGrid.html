@@ -10,6 +10,7 @@
 	<link rel="stylesheet" href="../../bower_components/bootstrap/less/bootstrap.css">
 	<link rel="stylesheet" href="../../bower_components/font-awesome/css/font-awesome.css">
 	<link rel="stylesheet" href="../../bower_components/tr-ng-grid/trNgGrid.css">
+	<link rel="stylesheet" href="../../bower_components/angular-xeditable/dist/css/xeditable.css">
 	<link rel="stylesheet" href="trNgGrid.css">
 	<script src="../../bower_components/lodash/lodash.js"></script>
 	<script src="../../bower_components/moment/moment.js"></script>
@@ -20,6 +21,7 @@
 	<script src="../../bower_components/restangular/dist/restangular.js"></script>
 	<script src="../../bower_components/angular-ui-router/release/angular-ui-router.js"></script>
 	<script src="../../bower_components/tr-ng-grid/trNgGrid.js"></script>
+	<script src="../../bower_components/angular-xeditable/dist/js/xeditable.js"></script>
 	<script src="trNgGrid.js"></script>
 	<script src="userRepo.js"></script>
 	<style>
@@ -27,21 +29,84 @@
 </head>
 <body ng-controller="ctrl" class="container-fluid">
 
+<!--<table  tr-ng-grid items="users" selected-items="selItems" enable-sorting="true">-->
+<table track-table tr-ng-grid items="users" selected-items="selItems" page-items="4" enable-sorting="true" total-items="totalItems", on-data-required="getPage(currentPage, pageItems, filterBy, filterByFields, orderBy, orderByReverse)" order-by="orderBy" order-by-reverse="orderByReverse" current-page="curPage" fields="['rownum', 'name', 'age']">
+	<thead>
+	<tr>
+		<th field-name="rownum" style="width: 60px;" enable-filtering="false" enable-sorting="false"></th>
+		<th field-name="name" enable-filtering="false"></th>
+		<th field-name="age" enable-filtering="false"></th>
+		<th enable-filtering="false">
+			<a href="" ng-click="addUser()">add row</a>
+		</th>
+	</tr>
+	</thead>
+	<tbody>
+	<tr ng-form editable-form name="rowform" onbeforesave="saveUser($data, gridItem)"   shown="inserted == gridItem">
+		<td field-name="rownum"></td>
+		<td field-name="name">
+        <span editable-text="gridItem.name" e-name="name" e-form="rowform" onbeforesave="checkName($data, gridItem)" e-required>
+          {{ gridDisplayItem.name || 'empty' }}
+        </span>
+		</td>
+		<td field-name="age">
+        <span editable-text="gridItem.age" e-name="age" e-form="rowform" onbeforesave="checkAge($data, gridItem)" e-required>
+          {{ gridDisplayItem.age || 'empty' }}
+        </span>
+		</td>
+		<td>
+			<div>
+				<div ng-show="rowform.$visible" class="form-buttons form-inline">
+					<a href="" ng-disabled="rowform.$waiting" ng-click="rowform.$submit()">save</a>
+					<a href="" type="button" ng-disabled="rowform.$waiting" ng-click="rowform.$cancel()">					cancel</a>
+				</div>
+				<div class="buttons" ng-show="!rowform.$visible">
+					<a href="" ng-click="rowform.$show()">edit</a>
+					<a href="" ng-click="removeUser(gridItem)">del</a>
+				</div>
+			</div>
+		</td>
+	</tr>
+	</tbody>
+</table>
+<a href="" ng-click="addUser()">add row</a><br>
 
-	<table track-table  class=""  tr-ng-grid items="users" selected-items="selItems" page-items="4" enable-sorting="true" selection-mode="SingleRow" total-items="totalItems", on-data-required="getPage(currentPage, pageItems, filterBy, filterByFields, orderBy, orderByReverse)" order-by="orderBy" order-by-reverse="orderByReverse" current-page="curPage">
+<!--
+	<table  class=""  tr-ng-grid items="users" selected-items="selItems" enable-sorting="true" selection-mode="SingleRow" >
 		<thead>
 		<tr>
 			<th field-name="rownum" display-format="number:2"></th>
 			<th field-name="name"></th>
 			<th field-name="age"></th>
+			<th>      <div>
+				<button class="btn btn-default" ng-click="addUser()">Add row</button>
+			</div> </th>
 		</tr>
 		</thead>
 		<tbody>
-		<tr>
-			<td field-name="name"><div>{{gridItem.name + gridItem.age}} <a href="" ng-click="changeName(gridItem)">change</a> </div></td>
+		<tr ng-form editable-form name="rowform" onbeforesave="saveUser($data, gridItem._id)" shown="newFormData == gridItem">
+			<td field-name="name">
+				<span editable-text="gridtItem.name" e-name="name" e-form="rowform">{{gridDisplayItem.name || 'unknown'}}</span>
+			</td>
+			<td field-name="age">
+				<span editable-text="gridtItem.age" e-name="age" e-form="rowform">{{gridDisplayItem.age || 'unknown'}}</span>
+			</td>
+			<td>
+				<div>
+					<div ng-show="rowform.$visible" class="form-buttons form-inline">
+						<button type="button" ng-disabled="rowform.$waiting" class="btn btn-primary">save </button>
+						<button type="button" ng-disabled="rowform.$waiting" class="btn btn-default" ng-click="rowform.$cancel()">cancel</button>
+					</div>
+					<div ng-hide="rowform.$visible">
+						<button class="btn btn-primary" ng-click="rowform.$show()">edit</button>
+						<button class="btn btn-danger" ng-click="removeUser(gridItem._id)">delete</button>
+					</div>
+				</div>
+			</td>
 		</tr>
 		</tbody>
 	</table>
+-->
 curPage: {{curPage}}<br>
 	orderBy: {{orderBy}}<br>
 	orderByReverse: {{orderByReverse}}<br>

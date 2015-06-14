@@ -3,6 +3,12 @@ angular.module('dkGrid', [])
 		return {
 			scope: true,
 			link: function ($scope) {
+				if(!window.jQuery)
+					throw new Error('dkGrid requires jquery')
+				if(!window._)
+					throw new Error('dkGrid requires lodash')
+
+
 				var mode = $scope.mode = 'all';
 				$scope.noResults = false;
 				$scope.curPage = 0;
