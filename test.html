@@ -6,8 +6,6 @@
 	<title>test</title>
 	<link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.css">
 	<link rel="stylesheet" href="bower_components/font-awesome/css/font-awesome.css">
-	<link rel="stylesheet" href="bower_components/tr-ng-grid/trNgGrid.css">
-	<link rel="stylesheet" href="bower_components/angular-xeditable/dist/css/xeditable.css">
 	<link rel="stylesheet" href="less/test.css">
 	<script src="bower_components/lodash/lodash.js"></script>
 	<script src="bower_components/jquery/dist/jquery.js"></script>
@@ -16,9 +14,8 @@
 	<script src="bower_components/angular-ui-router/release/angular-ui-router.js"></script>
 	<script src="bower_components/ui-router-extras/release/ct-ui-router-extras.js"></script>
 	<script src="bower_components/restangular/dist/restangular.js"></script>
-	<script src="bower_components/tr-ng-grid/trNgGrid.js"></script>
-	<script src="bower_components/angular-xeditable/dist/js/xeditable.js"></script>
-<style>
+	<script src="bower_components/angular-breadcrumb/dist/angular-breadcrumb.js"></script>
+	<style>
 </style>
 </head>
 <body ng-controller="ctrl">
@@ -42,7 +39,7 @@ myform.$errors: {{myform.$valid}}<br>
 
 
 <script>
-	var app = angular.module('app', ['restangular', 'ui.router', 'ct.ui.router.extras.sticky', 'ct.ui.router.extras.dsr', 'trNgGrid', 'xeditable']);
+	var app = angular.module('app', ['restangular', 'ui.router', 'ct.ui.router.extras.sticky', 'ct.ui.router.extras.dsr', 'ncy-angular-breadcrumb']);
 	app.run(function(editableOptions, editableThemes) {
 		editableOptions.theme = 'bs3';
 		editableThemes.bs3.inputClass = 'input-sm';

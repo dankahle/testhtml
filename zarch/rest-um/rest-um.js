@@ -1,6 +1,6 @@
 (function () {
 
-	var app = angular.module('app', ['ngAnimate', 'restangular', 'ui.router', 'ct.ui.router.extras.sticky', 'ct.ui.router.extras.dsr']);
+	var app = angular.module('app', ['ngAnimate', 'restangular', 'ui.router', 'ct.ui.router.extras.sticky', 'ct.ui.router.extras.dsr', 'ncy-angular-breadcrumb']);
 
 	app.constant('$urlPaths', {
 		api: 'http://localhost:3000/api'
@@ -20,25 +20,31 @@
 			console.log(error.stack);
 		})
 		$rootScope.$on('$stateChangeSuccess', function (event, to, top, from, fromp, error) {
+			$rootScope.fromState = from;
 			console.log('>> ' + to.name);
 		})
 	})
-	app.config(function (RestangularProvider, $stateProvider, $urlRouterProvider, $urlPaths) {
-
+	app.config(function (RestangularProvider, $stateProvider, $urlRouterProvider, $urlPaths, $breadcrumbProvider) {
+		$breadcrumbProvider.setOptions({
+			prefixStateName: 'home',
+			//includeAbstract: true
+		})
 		RestangularProvider.setBaseUrl($urlPaths.api);
 		RestangularProvider.setRestangularFields({
 			id: '_id'
 		})
 
-		//$urlRouterProvider.otherwise()
+		//$urlRouterProvider.otherwise('/')
 		$stateProvider
 			.state('home', {
-				url: '/'
+				url: '/',
+				ncyBreadcrumb: {label: 'home'}
 			})
 			.state('add', {
 				url: '/add',
 				controller: 'userAddCtrl',
-				templateUrl: 'userTemp'
+				templateUrl: 'userTemp',
+				ncyBreadcrumb: {label: 'add'}
 			})
 			.state('user', {
 				abstract: true,
@@ -48,22 +54,26 @@
 					user: function ($users, $stateParams) {
 						return $users.getOne($stateParams.userId);
 					}
-				}
+				},
+				ncyBreadcrumb: {label: 'user'}
 			})
 			.state('user.edit', {
 				url: '/edit',
 				controller: 'userEditCtrl',
-				templateUrl: 'userTemp'
+				templateUrl: 'userTemp',
+				ncyBreadcrumb: {label: 'profile'}
 			})
 			.state('user.message', {
 				url: '/messages',
 				controller: 'messagesCtrl',
-				templateUrl: 'messagesTemp'
+				templateUrl: 'messagesTemp',
+				ncyBreadcrumb: {label: 'messages'}
 			})
 			.state('user.message.add', {
 				url: '/add',
 				controller: 'messageAddCtrl',
-				templateUrl: 'messageTemp'
+				templateUrl: 'messageTemp',
+				ncyBreadcrumb: {label: 'add'}
 			})
 			.state('user.message.edit', {
 				url: '/:messageId/edit',
@@ -73,7 +83,8 @@
 					}
 				},
 				controller: 'messageEditCtrl',
-				templateUrl: 'messageTemp'
+				templateUrl: 'messageTemp',
+				ncyBreadcrumb: {label: 'edit'}
 			})
 
 	})
@@ -134,7 +145,7 @@
 		$('#user-name').focus()
 	})
 
-	app.controller('userEditCtrl', function ($scope, user, $users) {
+	app.controller('userEditCtrl', function ($scope, user, $users, $stateParams) {
 		$scope.mode = 'edit';
 		$scope.user = user;
 		$scope.submit = function () {
@@ -144,7 +155,7 @@
 				alert('Failed to update user.')
 			})
 		}
-		$('#user-name').focus()
+		$('#user-name').focus();
 	})
 	app.controller('messagesCtrl', function ($scope, user, $users) {
 
