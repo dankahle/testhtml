@@ -55,6 +55,7 @@ app.filter('nameAge', function() {
 app.directive('trackTable', function($location) {
 	return {
 		link: function($scope, elem, attr) {
+
 			function getSortKey() {
 				if($scope.orderBy)
 					return $scope.orderBy + ($scope.orderByReverse? '-dn': '-up');
@@ -74,16 +75,6 @@ app.directive('trackTable', function($location) {
 				$location.search('sortKey', getSortKey());
 			})
 
-			var search = $location.search();
-			if(search.totalItems)
-				$scope.totalItems = search.totalItems;
-			if(search.curPage)
-				$scope.curPage = parseInt(search.curPage);
-			if(search.sortKey) {
-				$scope.orderBy = search.sortKey.substr(0, search.sortKey.length - 3);
-				$scope.orderByReverse = search.sortKey.substr(-2) == 'up'? false: true;
-			}
-
 		}
 	}
 })
@@ -93,12 +84,27 @@ app.directive('trackTable', function($location) {
  * delete needs to stay on same page, but might not be there after delete. What to do?
  */
 
-app.controller('ctrl', function ($scope, userRepo, $timeout) {
+app.controller('ctrl', function ($scope, userRepo, $timeout, $location) {
 	var lastGetPage,
 		mode = 'page';
 
 	$scope.dkGridRepo = userRepo;
 	$scope.filters  = {name: 't', age: 31};
+
+	// had this in trackTable directive, but there was a race condition and the orderBy values
+	// weren't being set in time for the on-data-required function call, but curPage was making it
+	// weird. Moved it here and all is good.
+
+	var search = $location.search();
+	if(search.totalItems)
+		$scope.totalItems = search.totalItems;
+	if(search.curPage)
+		$scope.curPage = parseInt(search.curPage);
+	if(search.sortKey) {
+		$scope.orderBy = search.sortKey.substr(0, search.sortKey.length - 3);
+		$scope.orderByReverse = search.sortKey.substr(-2) == 'up'? false: true;
+	}
+
 
 
 	$scope.removeUser = function(item) {
@@ -165,7 +171,7 @@ app.controller('ctrl', function ($scope, userRepo, $timeout) {
 			sortKey = orderBy + '-dn';
 		else if(orderBy)
 			sortKey = orderBy + '-up';
-		console.log('getpage', currentPage, pageItems, sortKey)
+		console.log('getpage', currentPage, pageItems, orderBy, orderByReverse, sortKey)
 		userRepo.getPage(currentPage+1, pageItems, sortKey)
 			.then(function(data) {
 				$scope.totalItems = data.numRecords;

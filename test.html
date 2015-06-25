@@ -6,6 +6,7 @@
 	<title>test</title>
 	<link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.css">
 	<link rel="stylesheet" href="bower_components/font-awesome/css/font-awesome.css">
+	<link rel="stylesheet" href="bower_components/animate.css/animate.css">
 	<link rel="stylesheet" href="less/test.css">
 	<script src="bower_components/lodash/lodash.js"></script>
 	<script src="bower_components/jquery/dist/jquery.js"></script>
@@ -14,73 +15,37 @@
 	<script src="bower_components/angular-ui-router/release/angular-ui-router.js"></script>
 	<script src="bower_components/ui-router-extras/release/ct-ui-router-extras.js"></script>
 	<script src="bower_components/restangular/dist/restangular.js"></script>
-	<script src="bower_components/angular-breadcrumb/dist/angular-breadcrumb.js"></script>
 	<style>
-</style>
+
+
+	</style>
 </head>
 <body ng-controller="ctrl">
-
-<ul>
-	<li ng-repeat="val in [4,5,6]">{{val}}</li>
-</ul>
-
-
-
-<div ng-form editable-form name="myform">
-	name: <input ng-model="name" required><br>
-	age: <input ng-model="age"><br>
-</div>
-myform.$valid: {{myform.$valid}}<br>
-myform.$errors: {{myform.$valid}}<br>
-
-<span editable-text="user.name" onbeforesave="validate($data)" onaftersave="save()">
-    {{ user.name || 'empty' }}
-  </span>
-
+<div class="two">lala</div>
+<span class="fa fa-star">just class</span><span>just class</span><br>
+<span class="one">lala</span><br>
+<h1 class="title-text animated rollOut">Your Favorite</h1><br>
 
 <script>
-	var app = angular.module('app', ['restangular', 'ui.router', 'ct.ui.router.extras.sticky', 'ct.ui.router.extras.dsr', 'ncy-angular-breadcrumb']);
-	app.run(function(editableOptions, editableThemes) {
-		editableOptions.theme = 'bs3';
-		editableThemes.bs3.inputClass = 'input-sm';
-		editableThemes.bs3.buttonsClass = 'btn-sm';
-	})
 
+	function test() {
+		$('h1').toggleClass('one')
+	}
 
+	var app = angular.module('app', ['restangular', 'ui.router', 'ct.ui.router.extras.sticky', 'ct.ui.router.extras.dsr']);
 
-
-	app.controller('ctrl', function($scope, $q, $timeout, $filter){
+	app.controller('ctrl', function ($scope, $q, $timeout, $filter) {
 		var log = $scope.log = console.log.bind(console);
 
-		$scope.user = {name: 'dank'}
-
-		$scope.validate = function(val) {
-			var def = $q.defer();
-			$timeout(function() {
-				val == 'dank'? def.resolve(true): def.reject('Name needs to be dank.');
-			}, 1000)
-			return def.promise;
+		$scope.submit = function() {
+			log('sumbit')
 		}
-
-		$scope.save = function() {
-			return $q.reject({error: 'something wrong'})
-				.then(function() {
-					return true;
-				}, function(err) {
-					return $q.reject(err.error);
-				})
-		}
-
-		$scope.arr = [
-			{name: 'dank', age: '50'},
-			{name: 'carl', age: '60'},
-		]
-
-		console.log(_.find($scope.arr, {name: 'dank'}))
 
 	})
 
 
 </script>
+
+
 </body>
 </html>
