@@ -1,0 +1,7 @@
+
+/* Start Sprite Master CSS */
+.chair60,.kneelmod,.quest{background-repeat: no-repeat;background-image: url('sprite.png');}
+.chair60{background-position:0px 0px;width:300px;height:290px;}
+.kneelmod{background-position:-300px 0px;width:50px;height:50px;}
+.quest{background-position:-350px 0px;width:48px;height:48px;}
+/* End Sprite Master CSS */

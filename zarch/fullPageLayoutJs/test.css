@@ -1,0 +1,88 @@
+.outline {
+  outline: thin solid;
+  outline-offset: -1px;
+}
+.outline-red {
+  outline: thin solid;
+  outline-offset: -1px;
+  outline-color: red;
+}
+.outline-blue {
+  outline: thin solid;
+  outline-offset: -1px;
+  outline-color: blue;
+}
+.clearfix:before,
+.clearfix:after {
+  content: " ";
+  display: table;
+}
+.clearfix:after {
+  clear: both;
+}
+.box {
+  width: 100px;
+  height: 100px;
+  outline: thin solid;
+  outline-offset: -1px;
+}
+/*
+html {
+  height: 100%;
+}
+body {
+  min-height: 100%;
+  .outline-blue;
+}
+*/
+body {
+  padding: 30px;
+}
+html {
+  height: 100%;
+}
+body {
+  min-height: 100%;
+  padding: 0;
+  margin: 0 auto;
+  outline: thin solid;
+  outline-offset: -1px;
+  outline-color: blue;
+}
+body:before,
+body:after {
+  content: " ";
+  display: table;
+}
+body:after {
+  clear: both;
+}
+.one {
+  outline: thin solid;
+  outline-offset: -1px;
+}
+.one.left,
+.one.right {
+  width: 200px;
+  background-color: rgba(255, 0, 0, 0.1);
+}
+.one.right {
+  float: right;
+}
+.one.left {
+  float: left;
+  overflow: auto;
+}
+.one.main {
+  outline: thin solid;
+  outline-offset: -1px;
+  outline-color: red;
+  background-color: rgba(0, 0, 255, 0.1);
+  overflow: auto;
+}
+footer {
+  height: 60px;
+  outline: thin solid;
+  outline-offset: -1px;
+  clear: both;
+}

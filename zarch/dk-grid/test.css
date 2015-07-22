@@ -1,0 +1,72 @@
+.dk-grid .no-results {
+  border-top: 2px solid;
+  margin: 20px 0px;
+  padding-top: 20px;
+}
+.dk-grid table th span.sort-direction {
+  display: inline-block;
+  font-size: 19px;
+  line-height: .5em;
+  width: 13px;
+  margin-left: 5px;
+  position: relative;
+  top: 1px;
+}
+.dk-grid nav {
+  display: inline-block;
+}
+.dk-grid nav + nav {
+  margin-left: 4px;
+}
+.dk-grid .pagination {
+  margin-top: 0;
+}
+.dk-grid .pagination a.arrow {
+  padding: 6px 10px;
+}
+.dk-grid .pagination a.arrow span {
+  font-size: 17px;
+}
+.dk-grid .pagination a.page-range {
+  padding: 6px 8px;
+}
+.dk-grid .pagination a.page-range span {
+  line-height: .5;
+  position: relative;
+  top: -3px;
+  font-size: 16px;
+}
+.dk-edit-dlg-backdrop {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 1000;
+}
+.dk-edit-dlg {
+  z-index: 1010;
+  background: white;
+  padding: 20px 40px;
+  position: fixed;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  box-shadow: 0 0 5px black;
+}
+.dk-edit-dlg .dk-edit-dlg-title {
+  text-align: center;
+  margin-top: 0;
+  margin-bottom: 23px;
+}
+.dk-edit-dlg .dk-edit-dlg-button {
+  float: right;
+  margin-left: 11px;
+  margin-top: 4px;
+}
+#mygrid table tr td:nth-of-type(1) {
+  width: 50px;
+}
+#mygrid table tr td:nth-of-type(2) {
+  width: 200px;
+}

@@ -55,7 +55,7 @@
 
 <script>
 	var app = angular.module('app', ['restangular', 'ui.router', 'ngAnimate']);
-	app.run(function (Restangular, $state, $stateParams, $rootScope, $location) {
+	app.run(function (Restangular, $state, $stateParams, $rootScope, $location, $anchorScroll) {
 		Restangular.setErrorInterceptor(function (response, deferred, responseHandler) {
 			console.log('error:', response)
 			return true;
@@ -70,6 +70,9 @@
 			console.log(error.stack);
 		})
 		$rootScope.$on('$stateChangeSuccess', function (event, to, top, from, fromp, error) {
+			if($location.hash())
+				$anchorScroll();
+
 			console.log('>> ' + to.name);
 		})
 	})
@@ -88,7 +91,7 @@
 				}
 			})
 			.state('profile', {
-				url: '/profile',
+				url: '/profile#bottom',
 				views: {
 					header: {template: 'profile header'},
 //					main: {template: 'profile main'},

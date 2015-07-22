@@ -1,10 +1,12 @@
 //@import (reference) '../bower_components/bootstrap/less/bootstrap';
 //@import (reference) 'extra';
 
-.outline() {
+.outline {
   outline: thin solid;
   outline-offset: -1px;
 }
+.outline-red {.outline; outline-color:red;}
+.outline-blue {.outline; outline-color:blue;}
 
 .clearfix() {
   &:before,
@@ -24,8 +26,9 @@ html { height: 100%; }
 body {
   min-height: 100%;
   position: relative;
-  .outline;
-  outline-color: red;
+  .outline-red;
+  outline-offset: -2px;
+  //background-color: tan;
 }
 
 .main-content {

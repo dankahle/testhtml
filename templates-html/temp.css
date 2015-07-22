@@ -1,0 +1,12 @@
+.outline {
+  outline: thin solid;
+  outline-offset: -1px;
+}
+.clearfix:before,
+.clearfix:after {
+  content: " ";
+  display: table;
+}
+.clearfix:after {
+  clear: both;
+}

@@ -19,65 +19,26 @@
 	<script src="bower_components/angular/angular.js"></script>
 	<script src="bower_components/restangular/dist/restangular.js"></script>
 	<script src="bower_components/angular-ui-router/release/angular-ui-router.js"></script>
-
 	<style>
-
-
-
 	</style>
 </head>
 <body ng-controller="ctrl" class="container-fluid">
 
-main name: {{name}}<br>
-<div outer>
-	transclude name: {{name}}<br>
-	<div inner>
-		inner name: {{name}}
-	</div>
-</div>
-
+<div class="before">before</div>
+<div class="one">one</div>
+<div class="two">two</div>
+<div class="after">after</div>
 <script>
-
-
 	var app = angular.module('app', ['restangular', 'ui.router']);
-
 
 	app.run(function ($rootScope, $location) {
 		$rootScope.$location = $location;
 	})
 	app.config(function(RestangularProvider, $stateProvider, $urlRouterProvider) {
 	})
-	app.directive('outer', function() {
-		return {
-			scope: true,
-			transclude: true,
-			template: 'outer name: {{name}}<br><div ng-transclude></div>',
-			link: function($scope, elem, attr) {
-				$scope.name = 'outer';
-
-			}
-		}
-	})
-	app.directive('inner', function() {
-		return {
-			scope: true,
-			link: function($scope, elem, attr) {
-				$scope.name = 'inner';
-				$scope.$on('refresh', function() {
-					console.log('refresh3');
-				})
-
-			}
-		}
-	})
-
-
 
 	app.controller('ctrl', function ($scope, $state, $stateParams, Restangular, $location) {
-		//$scope.name = 'main';
-		$scope.click = function() {
-			$scope.$broadcast('refresh');
-		}
+
 	})
 </script>
 </body>

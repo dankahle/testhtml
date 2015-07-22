@@ -1,0 +1,57 @@
+html {
+  height: 100%;
+}
+body {
+  min-height: 100%;
+  position: relative;
+  outline: thin solid;
+  outline-offset: -1px;
+  outline-color: red;
+}
+.main-content {
+  margin-bottom: 60px;
+}
+[class^=col-],
+[class*=' col-'] {
+  /*
+  background: lightgray;
+  background-clip: content-box;
+  */
+  outline: thin solid;
+  outline-offset: -1px;
+  position: relative;
+}
+ui-view.ng-enter {
+  transition: opacity 1s;
+  opacity: 0;
+}
+ui-view.ng-enter.ng-enter-active {
+  opacity: 1;
+}
+ui-view.ng-leave {
+  display: none;
+}
+header,
+footer {
+  height: 60px;
+  outline: thin solid;
+  outline-offset: -1px;
+}
+footer {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 0;
+}
+.list-unstyled a {
+  display: inline-block;
+  color: green;
+  border: 2px solid;
+  padding: 5px 12px;
+}
+.list-unstyled a:hover {
+  text-decoration: none;
+}
+.list-unstyled li:not(:first-child) {
+  margin-top: 4px;
+}

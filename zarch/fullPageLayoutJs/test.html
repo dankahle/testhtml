@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html ng-app='app'>
+<head lang="en">
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+	<title>test</title>
+	<link rel="stylesheet" href="../../bower_components/bootstrap/dist/css/bootstrap.css">
+	<link rel="stylesheet" href="../../bower_components/font-awesome/css/font-awesome.css">
+	<link rel="stylesheet" href="../../bower_components/animate.css/animate.css">
+	<link rel="stylesheet" href="test.css">
+	<script src="../../bower_components/lodash/lodash.js"></script>
+	<script src="../../bower_components/jquery/dist/jquery.js"></script>
+	<script src="../../bower_components/bootstrap/dist/js/bootstrap.js"></script>
+	<script src="../../bower_components/angular/angular.js"></script>
+	<script src="../../bower_components/angular-animate/angular-animate.js"></script>
+	<script src="../../bower_components/angular-touch/angular-touch.js"></script>
+	<script src="../../bower_components/angular-ui-router/release/angular-ui-router.js"></script>
+	<script src="../../bower_components/ui-router-extras/release/ct-ui-router-extras.js"></script>
+	<script src="../../bower_components/restangular/dist/restangular.js"></script>
+	<style>
+
+
+	</style>
+</head>
+<body class="container-fluid"  ng-controller="ctrl">
+
+<div class="one left">left
+	lala<br>lala<br>lala<br>lala<br>lala<br>lala<br>lala<br>lala<br>lala<br>lala<br>
+</div>
+<div class="one right">right</div>
+<div class="one main">main
+	lala<br>lala<br>lala<br>lala<br>lala<br>lala<br>lala<br>lala<br>lala<br>lala<br>
+</div>
+<footer>footer</footer>
+
+
+<script>
+
+	$(function () {
+		var orgHeight,
+			$left = $('.left'),
+			$main = $('.main'),
+			$right = $('.right'),
+			footerHeight = 60,
+			runCount = 0;
+
+		function setHeights(arg) {
+			console.log('runCount', ++runCount);
+			var init = arg == 'init',
+				height = Math.max($left.height(), $main.height(), $right.height()),
+				base = window.innerHeight - footerHeight;
+			if (init) {
+				orgHeight = height;
+//         console.log('init', orgHeight, height, base)
+			}
+			if (height < base) {
+//         console.log('height < base', orgHeight, height, base)
+				height = base;
+			}
+			else if (orgHeight < base) {
+//         console.log('orgHeight < base', orgHeight, height, base)
+				height = base;
+			}
+
+			[$left, $main, $right].forEach(function (v) {
+				v.height(height);
+			})
+
+			/*
+			 // turns out you don't need to do this as the column height setting puts the footer right where you want it.
+			 var $footer = $('footer');
+			 var footerOffset = $footer.offset();
+			 console.log(footerOffset, window.innerHeight)
+			 if (footerOffset.top < window.innerHeight - footerHeight)
+			 $footer.offset({top: window.innerHeight - footerHeight, left: footerOffset.left});
+			 */
+		}
+
+		setHeights('init');
+		$(window).resize(setHeights);
+		//window.onresize = setHeights;
+	})
+
+
+	var app = angular.module('app', ['ngTouch', 'ngAnimate', 'restangular', 'ui.router', 'ct.ui.router.extras.sticky', 'ct.ui.router.extras.dsr']);
+
+	app.controller('ctrl', function ($scope, $q, $timeout, $filter) {
+		var log = $scope.log = console.log.bind(console);
+
+		$scope.toggle = function(){
+			$('.inner').toggleClass('open');
+		}
+
+
+	})
+
+
+</script>
+
+
+</body>
+</html>

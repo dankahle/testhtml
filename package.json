@@ -13,6 +13,7 @@
   "devDependencies": {
     "chai": "^2.1.1",
     "chai-as-promised": "^4.3.0",
+    "gulp-less": "^3.0.3",
     "gulp-mocha": "^2.0.0",
     "gulp-plumber": "^1.0.0",
     "gulp-protractor": "0.0.12",

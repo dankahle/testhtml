@@ -1,8 +1,9 @@
 
 
-var gulp = require('gulp');
-
-var tap = require('gulp-tap')
+var gulp = require('gulp'),
+	less = require('gulp-less'),
+	autoPrefixer = require('gulp-autoprefixer'),
+	tap = require('gulp-tap')
 
 
 var karma = require('karma').server
@@ -58,3 +59,10 @@ gulp.task('testMocha', function () {
 
 
 gulp.task('test-mocha', ['testMocha']);
+
+gulp.task('less', function() {
+	gulp.src('less/test.less')
+		.pipe(less())
+		.pipe(autoPrefixer())
+		.pipe(gulp.dest('dist/css'));
+});

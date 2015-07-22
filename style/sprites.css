@@ -1,0 +1,207 @@
+.icon-quest,
+.icon-last,
+.icon-button_black_last,
+.icon-button_grey_last,
+.icon-disk_manager,
+.icon-facebook,
+.icon-firefox_jr,
+.icon-format_indent_more,
+.icon-gnome_aisleriot,
+.icon-gnome_fs_executable,
+.icon-gnome_search_tool,
+.icon-go_last_page,
+.icon-go_up_black,
+.icon-gtweakui,
+.icon-brightside,
+.icon-last_fm,
+.icon-liferea,
+.icon-lincity_ng,
+.icon-new_go_last,
+.icon-old_go_last,
+.icon-preferences_composer,
+.icon-bitwash,
+.icon-slune,
+.icon-social_media_icons_blot_icons_set_128x128_0012_last_fm,
+.icon-social_media_icons_flat_shadow_set_128x128_0012_last_fm,
+.icon-stock_channel,
+.icon-system_software_installer,
+.icon-text_x_hex,
+.icon-totem
+{
+  background-image: url('../images/sprites.png');
+}
+
+.icon-quest {
+  background-position: -4px -4px;
+  width: 48px;
+  height: 48px;
+}
+
+.icon-last {
+  background-position: -4px -60px;
+  width: 128px;
+  height: 128px;
+}
+
+.icon-button_black_last {
+  background-position: -4px -196px;
+  width: 128px;
+  height: 128px;
+}
+
+.icon-button_grey_last {
+  background-position: -4px -332px;
+  width: 128px;
+  height: 128px;
+}
+
+.icon-disk_manager {
+  background-position: -4px -468px;
+  width: 128px;
+  height: 128px;
+}
+
+.icon-facebook {
+  background-position: -4px -604px;
+  width: 128px;
+  height: 128px;
+}
+
+.icon-firefox_jr {
+  background-position: -4px -740px;
+  width: 128px;
+  height: 128px;
+}
+
+.icon-format_indent_more {
+  background-position: -4px -876px;
+  width: 128px;
+  height: 128px;
+}
+
+.icon-gnome_aisleriot {
+  background-position: -4px -1012px;
+  width: 128px;
+  height: 128px;
+}
+
+.icon-gnome_fs_executable {
+  background-position: -4px -1148px;
+  width: 128px;
+  height: 128px;
+}
+
+.icon-gnome_search_tool {
+  background-position: -4px -1284px;
+  width: 128px;
+  height: 128px;
+}
+
+.icon-go_last_page {
+  background-position: -4px -1420px;
+  width: 128px;
+  height: 128px;
+}
+
+.icon-go_up_black {
+  background-position: -4px -1556px;
+  width: 128px;
+  height: 128px;
+}
+
+.icon-gtweakui {
+  background-position: -4px -1692px;
+  width: 128px;
+  height: 128px;
+}
+
+.icon-brightside {
+  background-position: -4px -1828px;
+  width: 128px;
+  height: 128px;
+}
+
+.icon-last_fm {
+  background-position: -4px -1964px;
+  width: 128px;
+  height: 128px;
+}
+
+.icon-liferea {
+  background-position: -4px -2100px;
+  width: 128px;
+  height: 128px;
+}
+
+.icon-lincity_ng {
+  background-position: -4px -2236px;
+  width: 128px;
+  height: 128px;
+}
+
+.icon-new_go_last {
+  background-position: -4px -2372px;
+  width: 128px;
+  height: 128px;
+}
+
+.icon-old_go_last {
+  background-position: -4px -2508px;
+  width: 128px;
+  height: 128px;
+}
+
+.icon-preferences_composer {
+  background-position: -4px -2644px;
+  width: 128px;
+  height: 128px;
+}
+
+.icon-bitwash {
+  background-position: -4px -2780px;
+  width: 128px;
+  height: 128px;
+}
+
+.icon-slune {
+  background-position: -4px -2916px;
+  width: 128px;
+  height: 128px;
+}
+
+.icon-social_media_icons_blot_icons_set_128x128_0012_last_fm {
+  background-position: -4px -3052px;
+  width: 128px;
+  height: 128px;
+}
+
+.icon-social_media_icons_flat_shadow_set_128x128_0012_last_fm {
+  background-position: -4px -3188px;
+  width: 128px;
+  height: 128px;
+}
+
+.icon-stock_channel {
+  background-position: -4px -3324px;
+  width: 128px;
+  height: 128px;
+}
+
+.icon-system_software_installer {
+  background-position: -4px -3460px;
+  width: 128px;
+  height: 128px;
+}
+
+.icon-text_x_hex {
+  background-position: -4px -3596px;
+  width: 128px;
+  height: 128px;
+}
+
+.icon-totem {
+  background-position: -4px -3732px;
+  width: 128px;
+  height: 128px;
+}
+

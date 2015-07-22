@@ -1,0 +1,20 @@
+/*
+.bg150, .bg1{
+	background: url(sprites.png) no-repeat;
+}
+*/
+
+.bg150{
+	background-position: 0 0;
+	width: 150px;
+	height: 1px;
+}
+
+.bg1{
+	background-image: url(sprites.png);
+	background-repeat: no-repeat;
+	background-position: -158px 0;
+	width: 1px;
+	height: 1px;
+}
+
