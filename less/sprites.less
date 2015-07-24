@@ -1,0 +1,58 @@
+
+@quest: -4px, -4px, 48px, 48px;
+@last: -4px, -60px, 128px, 128px;
+@button_black_last: -4px, -196px, 128px, 128px;
+@button_grey_last: -4px, -332px, 128px, 128px;
+@disk_manager: -4px, -468px, 128px, 128px;
+@facebook: -4px, -604px, 128px, 128px;
+@firefox_jr: -4px, -740px, 128px, 128px;
+@format_indent_more: -4px, -876px, 128px, 128px;
+@gnome_aisleriot: -4px, -1012px, 128px, 128px;
+@gnome_fs_executable: -4px, -1148px, 128px, 128px;
+@gnome_search_tool: -4px, -1284px, 128px, 128px;
+@go_last_page: -4px, -1420px, 128px, 128px;
+@go_up_black: -4px, -1556px, 128px, 128px;
+@gtweakui: -4px, -1692px, 128px, 128px;
+@brightside: -4px, -1828px, 128px, 128px;
+@last_fm: -4px, -1964px, 128px, 128px;
+@liferea: -4px, -2100px, 128px, 128px;
+@lincity_ng: -4px, -2236px, 128px, 128px;
+@new_go_last: -4px, -2372px, 128px, 128px;
+@old_go_last: -4px, -2508px, 128px, 128px;
+@preferences_composer: -4px, -2644px, 128px, 128px;
+@bitwash: -4px, -2780px, 128px, 128px;
+@slune: -4px, -2916px, 128px, 128px;
+@social_media_icons_blot_icons_set_128x128_0012_last_fm: -4px, -3052px, 128px, 128px;
+@social_media_icons_flat_shadow_set_128x128_0012_last_fm: -4px, -3188px, 128px, 128px;
+@stock_channel: -4px, -3324px, 128px, 128px;
+@system_software_installer: -4px, -3460px, 128px, 128px;
+@text_x_hex: -4px, -3596px, 128px, 128px;
+@totem: -4px, -3732px, 128px, 128px;
+
+.sprite-width(@sprite) {
+  width: extract(@sprite, 3);
+}
+
+.sprite-height(@sprite) {
+  height: extract(@sprite, 4);
+}
+
+.sprite-position(@sprite) {
+  @sprite-offset-x: extract(@sprite, 1);
+  @sprite-offset-y: extract(@sprite, 2);
+  background-position: @sprite-offset-x  @sprite-offset-y;
+}
+
+.sprite(@sprite) {
+  .sprite-position(@sprite);
+  background-repeat: no-repeat;
+  overflow: hidden;
+  display: block;
+  .sprite-width(@sprite);
+  .sprite-height(@sprite);
+}
+
+.icon {
+  background-image: url('../sprites.png');
+}
+
