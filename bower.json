@@ -33,7 +33,8 @@
     "restangular": "^1.4.0",
     "zeroclipboard": "^2.2.0",
     "angular-loader": "1.4.0",
-    "angular-motion": "^0.3.4"
+    "angular-motion": "^0.3.4",
+    "jquery-ui-touch-punch": "*"
   },
   "resolutions": {
     "angular": "1.4.0",

@@ -2,25 +2,28 @@
 
 /* ///////////////////////////// */
 
-body {
-   margin: 0;
-   padding: 30px;
-}
+html,body {height: 100%;}
 
+body {
+   padding: 0px;
+}
 
 
 .one {
-   .box(200);
-   .outline;
-   position: relative;
-   padding: 30px;
-   background: plum;
-   background-clip: content-box;
-   border: 10px solid;
+   width: 400px;
+   position: fixed;
+   background: white;
+   border: 1px solid black;
+   z-index: 1000;
+   left: 50%;
+   top: 50%;
+   -webkit-transform: translate(-50%, -50%);
+   transform: translate(-50%, -50%);
+
 }
-.two {
-   display: inline-block;
-height:50%;
-   width: 50%;
-   .outline;
-}
+
+
+
+
+
+

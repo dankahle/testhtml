@@ -14,12 +14,12 @@ angular.module('dkGrid', [])
 				$scope.curPage = 0;
 				$scope.pageSize = 5;
 				$scope.addMode = $scope.editMode = false;
-				var dkGridRepo = $scope.dkGridRepo, 
+				var dkGridRepo = $scope.dkGridRepo,
 					pageRangeSize = 4,
 					numPages = $scope.numPages = 0,
 					allItems = [],
 					$trCurEdit, editItem,
-					usingEditDlg = $scope.usingEditDlg = false,
+					usingEditDlg = $scope.usingEditDlg = true,
 					$trAddLink = $('.dk-table tr.add-link-row'),
 					$trAddOrEdit = $('.dk-table tr.edit-row'),
 					$editDlg = $('.dk-edit-dlg'),
