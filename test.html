@@ -6,7 +6,6 @@
 	<title>test</title>
 	<link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.css">
    <link rel="stylesheet" href="bower_components/font-awesome/css/font-awesome.css">
-   <link rel="stylesheet" href="bower_components/dk-modal/dk-modal.css">
 	<link rel="stylesheet" href="less/test.css">
 
 
@@ -21,16 +20,26 @@
 	<script src="bower_components/angular-ui-router/release/angular-ui-router.js"></script>
 	<script src="bower_components/ui-router-extras/release/ct-ui-router-extras.js"></script>
 	<script src="bower_components/restangular/dist/restangular.js"></script>
-   <script src="bower_components/dk-modal/dk-modal.js"></script>
 </head>
 <body ng-controller="ctrl" ng-click="click()">
 
-<iframe width="300" height="200" src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3518.2591186472773!2d-82.73937500000001!3d28.138598999999996!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x88c28d639aa744a3%3A0x47c60140c6b969b!2sCoast+Floor+%26+Tile+Group!5e0!3m2!1sen!2sus!4v1438715190286" width="600" height="450" frameborder="0" style="border:0" allowfullscreen></iframe>
+<div class="one">
+   lala<br>lala<br>lala<br>lala<br>lala<br>lala<br>lala<br>lala<br>lala<br>lala<br>
+   lala<br>lala<br>lala<br>lala<br>lala<br>lala<br>lala<br>lala<br>lala<br>lala<br>
+   lala<br>lala<br>lala<br>lala<br>lala<br>lala<br>lala<br>lala<br>lala<br>lala<br>
+   bottom
+
+</div>
 
 <script>
    var log = console.log.bind(console);
-	var app = angular.module('app', ['ngAnimate', 'ngSanitize', 'ngTouch', 'ngMessages', 'restangular', 'ui.router', 'ct.ui.router.extras.sticky', 'ct.ui.router.extras.dsr', 'dkModal']);
+	var app = angular.module('app', ['ngAnimate', 'ngSanitize', 'ngTouch', 'ngMessages', 'restangular', 'ui.router', 'ct.ui.router.extras.sticky', 'ct.ui.router.extras.dsr']);
 
+
+   $('body').one('click mousemove', function(e) {
+      log('one', e.type)
+      $('.one').addClass('in');
+   })
 
 	app.controller('ctrl', function ($scope, $compile) {
       window.$scope = $scope;
@@ -39,6 +48,12 @@
       {name: 'dank', age: 50},
       {name: 'carl', age: 60}
       ];
+
+
+      $(window).resize(function() {
+         log('resizing')
+      })
+
 
 	})
 
