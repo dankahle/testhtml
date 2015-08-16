@@ -1,45 +1,49 @@
-<!DOCTYPE html>
-<html ng-app='app'>
-<head lang="en">
-	<title>test2</title>
-	<meta charset="UTF-8">
-	<meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+<!doctype html>
+<html lang="en">
+<head>
+   <meta charset="UTF-8">
+   <title>Example - example-example49-production</title>
+   <link href="style.css" rel="stylesheet" type="text/css">
 
-	<!--<script src="bower_components/modernizr/modernizr.js"></script>-->
-	<!--<base href="https://developer.mozilla.org/samples/cssref/">-->
-	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-	<title>test</title>
-	<link rel="stylesheet" href="bower_components/bootstrap/less/bootstrap.css">
-	<link rel="stylesheet" href="bower_components/font-awesome/css/font-awesome.css">
-	<link rel="stylesheet" href="less/test2.css">
-	<script src="bower_components/lodash/lodash.js"></script>
-	<script src="bower_components/numeral/numeral.js"></script>
-	<script src="bower_components/jquery/dist/jquery.js"></script>
-	<script src="bower_components/bootstrap/dist/js/bootstrap.js"></script>
-	<script src="bower_components/angular/angular.js"></script>
-	<script src="bower_components/restangular/dist/restangular.js"></script>
-	<script src="bower_components/angular-ui-router/release/angular-ui-router.js"></script>
-	<style>
-	</style>
+
+   <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.4.4/angular.min.js"></script>
+
+   <style>
+      #scrollArea {
+         height: 280px;
+         overflow: auto;
+      }
+
+      #bottom {
+         display: block;
+         margin-top: 2000px;
+      }
+   </style>
+
+
 </head>
-<body ng-controller="ctrl" class="container-fluid">
+<body ng-app="anchorScrollExample">
+<div id="scrollArea" ng-controller="ScrollController">
+   <a ng-click="gotoBottom()">Go to bottom</a>
+   <a id="bottom"></a> You're at the bottom!
+</div>
 
-<div class="before">before</div>
-<div class="one">one</div>
-<div class="two">two</div>
-<div class="after">after</div>
 <script>
-	var app = angular.module('app', ['restangular', 'ui.router']);
 
-	app.run(function ($rootScope, $location) {
-		$rootScope.$location = $location;
-	})
-	app.config(function(RestangularProvider, $stateProvider, $urlRouterProvider) {
-	})
+   angular.module('anchorScrollExample', [])
+      .controller('ScrollController', ['$scope', '$location', '$anchorScroll',
+         function ($scope, $location, $anchorScroll) {
+            $scope.gotoBottom = function() {
+               // set the location.hash to the id of
+               // the element you wish to scroll to.
+               $location.hash('bottom');
 
-	app.controller('ctrl', function ($scope, $state, $stateParams, Restangular, $location) {
+               // call $anchorScroll()
+                $anchorScroll();
+            };
+         }]);
 
-	})
 </script>
+
 </body>
 </html>

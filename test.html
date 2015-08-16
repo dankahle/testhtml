@@ -13,7 +13,8 @@
 	<script src="bower_components/jquery/dist/jquery.js"></script>
 	<script src="bower_components/bootstrap/dist/js/bootstrap.js"></script>
 	<script src="bower_components/angular/angular.js"></script>
-	<script src="bower_components/angular-animate/angular-animate.js"></script>
+   <script src="bower_components/angular-route/angular-route.js"></script>
+   <script src="bower_components/angular-animate/angular-animate.js"></script>
 	<script src="bower_components/angular-sanitize/angular-sanitize.js"></script>
 	<script src="bower_components/angular-touch/angular-touch.js"></script>
 	<script src="bower_components/angular-messages/angular-messages.js"></script>
@@ -21,38 +22,17 @@
 	<script src="bower_components/ui-router-extras/release/ct-ui-router-extras.js"></script>
 	<script src="bower_components/restangular/dist/restangular.js"></script>
 </head>
-<body ng-controller="ctrl" ng-click="click()">
+<body ng-controller="ctrl">
 
-<div class="one">
-   lala<br>lala<br>lala<br>lala<br>lala<br>lala<br>lala<br>lala<br>lala<br>lala<br>
-   lala<br>lala<br>lala<br>lala<br>lala<br>lala<br>lala<br>lala<br>lala<br>lala<br>
-   lala<br>lala<br>lala<br>lala<br>lala<br>lala<br>lala<br>lala<br>lala<br>lala<br>
-   bottom
-
-</div>
 
 <script>
    var log = console.log.bind(console);
-	var app = angular.module('app', ['ngAnimate', 'ngSanitize', 'ngTouch', 'ngMessages', 'restangular', 'ui.router', 'ct.ui.router.extras.sticky', 'ct.ui.router.extras.dsr']);
 
 
-   $('body').one('click mousemove', function(e) {
-      log('one', e.type)
-      $('.one').addClass('in');
-   })
+	var app = angular.module('app', ['ngAnimate', 'ngRoute', 'ngSanitize', 'ngTouch', 'ngMessages', 'restangular']);
 
-	app.controller('ctrl', function ($scope, $compile) {
+	app.controller('ctrl', function ($scope, $timeout, $location, $anchorScroll) {
       window.$scope = $scope;
-
-      $scope.users = [
-      {name: 'dank', age: 50},
-      {name: 'carl', age: 60}
-      ];
-
-
-      $(window).resize(function() {
-         log('resizing')
-      })
 
 
 	})

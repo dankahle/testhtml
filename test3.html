@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html ng-app="app">
+<head lang="en">
+	<meta charset="UTF-8">
+	<title>test3</title>
+   <style>
+      .wrap {
+         height: 400px;
+         overflow-y: auto;
+      .outline;
+      }
+
+
+      nav {
+         /*
+			position: fixed;
+			top: 0;
+			left: 200px;
+			*/
+      }
+
+      .bottom {
+         margin-top: 2000px;
+      }
+
+   </style>
+</head>
+<body ng-controller="ctrl">
+
+<a  href="#bottom"  ng-click="click()">goto bottom href</a><br>
+<a  href="" ng-click="scroll()">goto bottom scroll()</a><br>
+<!--<a  ng-click="scroll()">goto bottom fcn</a>-->
+</nav>
+<div class="bottom">
+   <a id="bottom" class="bottom" href="#top">goto top</a>
+</div>
+<br>
+<script src="bower_components/angular/angular.js"></script>
+<script>
+   var log = console.log.bind(console);
+   var app = angular.module('app', []);
+
+
+   app.factory('ascroll', function() {
+      return function() {
+            parent = $dest.parent();
+         parent.scrollTop($dest.offset().top)
+      }
+   })
+
+   app.controller('ctrl', function($scope, $timeout, ascroll) {
+
+      $scope.click = function() {
+
+      }
+
+
+/*
+         $scope.loghash = function() {
+            $location.hash('bottom')
+            $timeout(function() {
+               log('hash', $location.hash())
+            })
+         }
+*/
+
+
+      })
+</script>
+
+</body>
+</html>
