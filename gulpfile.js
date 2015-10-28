@@ -1,6 +1,9 @@
 
 
 var gulp = require('gulp'),
+   karma = require('karma').server;
+/*
+
 	less = require('gulp-less'),
 	autoPrefixer = require('gulp-autoprefixer'),
 	tap = require('gulp-tap')
@@ -9,6 +12,7 @@ var gulp = require('gulp'),
 var karma = require('karma').server
 	ngHtml2js = require('gulp-ng-html2js'),
 	concat = require('gulp-concat')
+*/
 
 
 

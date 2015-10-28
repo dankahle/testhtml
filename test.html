@@ -4,13 +4,15 @@
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 	<title>test</title>
+
 	<link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.css">
    <link rel="stylesheet" href="bower_components/font-awesome/css/font-awesome.css">
 	<link rel="stylesheet" href="less/test.css">
 
 
-	<script src="bower_components/lodash/lodash.js"></script>
+	<!--<script src="bower_components/lodash/lodash.js"></script>-->
 	<script src="bower_components/jquery/dist/jquery.js"></script>
+   <script src="bower_components/underscore/underscore-min.js"></script>
 	<script src="bower_components/bootstrap/dist/js/bootstrap.js"></script>
 	<script src="bower_components/angular/angular.js"></script>
    <script src="bower_components/angular-route/angular-route.js"></script>
@@ -21,24 +23,18 @@
 	<script src="bower_components/angular-ui-router/release/angular-ui-router.js"></script>
 	<script src="bower_components/ui-router-extras/release/ct-ui-router-extras.js"></script>
 	<script src="bower_components/restangular/dist/restangular.js"></script>
+   <script src="app/app.js"></script>
+   <script src="app/mainCtrl.js"></script>
+   <script src="app/addAgeFilter.js"></script>
+   <script src="app/showNameDirective.js"></script>
 </head>
-<body ng-controller="ctrl">
+<style>
+</style>
+<body ng-controller="mainCtrl as vm">
+name: {{vm.name|addAge}}<br>
+full name: {{vm.getFullName('lala')}}
+<show-name defname="mary"></show-name>
 
-
-<script>
-   var log = console.log.bind(console);
-
-
-	var app = angular.module('app', ['ngAnimate', 'ngRoute', 'ngSanitize', 'ngTouch', 'ngMessages', 'restangular']);
-
-	app.controller('ctrl', function ($scope, $timeout, $location, $anchorScroll) {
-      window.$scope = $scope;
-
-
-	})
-
-
-</script>
 </body>
 </html>
 
