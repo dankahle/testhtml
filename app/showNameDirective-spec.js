@@ -13,7 +13,6 @@ describe("showName directive tests", function() {
    }));
 
    it('shows name', function() {
-      console.log(namer)
       var scope = $rootScope.$new();
       scope.vm = {
          name: 'dankman'

@@ -8,7 +8,7 @@
 	<link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.css">
    <link rel="stylesheet" href="bower_components/font-awesome/css/font-awesome.css">
 	<link rel="stylesheet" href="less/test.css">
-
+   <link rel="stylesheet" href="bower_components/angular-notify/dist/angular-notify.css">
 
 	<!--<script src="bower_components/lodash/lodash.js"></script>-->
 	<script src="bower_components/jquery/dist/jquery.js"></script>
@@ -21,8 +21,12 @@
 	<script src="bower_components/angular-touch/angular-touch.js"></script>
 	<script src="bower_components/angular-messages/angular-messages.js"></script>
 	<script src="bower_components/angular-ui-router/release/angular-ui-router.js"></script>
+   <script src="bower_components/angular-bootstrap/ui-bootstrap.min.js"></script>
+   <script src="bower_components/angular-bootstrap/ui-bootstrap-tpls.min.js"></script>
 	<script src="bower_components/ui-router-extras/release/ct-ui-router-extras.js"></script>
 	<script src="bower_components/restangular/dist/restangular.js"></script>
+   <script src="bower_components/angular-prompt/dist/angular-prompt.min.js"></script>
+   <script src="bower_components/angular-notify/dist/angular-notify.js"></script>
    <script src="app/app.js"></script>
    <script src="app/mainCtrl.js"></script>
    <script src="app/addAgeFilter.js"></script>
@@ -31,6 +35,7 @@
 <style>
 </style>
 <body ng-controller="mainCtrl as vm">
+<button ng-click="vm.click()">click</button><br>
 name: {{vm.name|addAge}}<br>
 full name: {{vm.getFullName('lala')}}
 <show-name defname="mary"></show-name>
