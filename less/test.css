@@ -31,19 +31,6 @@
   box-sizing: border-box;
 }
 /* ///////////////////////////// */
-.wrap {
-  height: 400px;
-  overflow-y: auto;
-  outline: 1px solid black;
-  outline-offset: -1px;
-}
-nav {
-  /*
-   position: fixed;
-   top: 0;
-   left: 200px;
-   */
-}
-.bottom {
-  margin-top: 2000px;
+.ui-select-container {
+  width: 200px;
 }

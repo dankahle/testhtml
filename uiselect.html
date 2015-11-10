@@ -1,31 +1,30 @@
 <!DOCTYPE html>
 <html ng-app='app'>
 <head lang="en">
-	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-	<title>test</title>
+   <meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+   <title>test</title>
 
-	<link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.css">
+   <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.css">
    <link rel="stylesheet" href="bower_components/font-awesome/css/font-awesome.css">
    <link rel="stylesheet" href="bower_components/angular-notify/dist/angular-notify.css">
    <link rel="stylesheet" href="bower_components/ui-select/dist/select.min.css">
-   <link rel="stylesheet" href="less/test.css">
 
-	<!--<script src="bower_components/lodash/lodash.js"></script>-->
-	<script src="bower_components/jquery/dist/jquery.js"></script>
+   <!--<script src="bower_components/lodash/lodash.js"></script>-->
+   <script src="bower_components/jquery/dist/jquery.js"></script>
    <script src="bower_components/underscore/underscore-min.js"></script>
-	<script src="bower_components/bootstrap/dist/js/bootstrap.js"></script>
-	<script src="bower_components/angular/angular.js"></script>
+   <script src="bower_components/bootstrap/dist/js/bootstrap.js"></script>
+   <script src="bower_components/angular/angular.js"></script>
    <script src="bower_components/angular-route/angular-route.js"></script>
    <script src="bower_components/angular-animate/angular-animate.js"></script>
-	<script src="bower_components/angular-sanitize/angular-sanitize.js"></script>
-	<script src="bower_components/angular-touch/angular-touch.js"></script>
-	<script src="bower_components/angular-messages/angular-messages.js"></script>
-	<script src="bower_components/angular-ui-router/release/angular-ui-router.js"></script>
+   <script src="bower_components/angular-sanitize/angular-sanitize.js"></script>
+   <script src="bower_components/angular-touch/angular-touch.js"></script>
+   <script src="bower_components/angular-messages/angular-messages.js"></script>
+   <script src="bower_components/angular-ui-router/release/angular-ui-router.js"></script>
    <script src="bower_components/angular-bootstrap/ui-bootstrap.min.js"></script>
    <script src="bower_components/angular-bootstrap/ui-bootstrap-tpls.min.js"></script>
-	<script src="bower_components/ui-router-extras/release/ct-ui-router-extras.js"></script>
-	<script src="bower_components/restangular/dist/restangular.js"></script>
+   <script src="bower_components/ui-router-extras/release/ct-ui-router-extras.js"></script>
+   <script src="bower_components/restangular/dist/restangular.js"></script>
    <script src="bower_components/angular-prompt/dist/angular-prompt.min.js"></script>
    <script src="bower_components/angular-notify/dist/angular-notify.js"></script>
    <script src="bower_components/ui-select/dist/select.min.js"></script>
@@ -35,11 +34,9 @@
    <script src="app/showNameDirective.js"></script>
 </head>
 <style>
-   .one {
-      position: absolute;
-      left: 400px;
-   }
-
+.one {
+   width: 200px;
+}
 </style>
 <body ng-controller="mainCtrl as vm">
 
@@ -75,8 +72,35 @@
 
 
 <script>
-</script>
+   var app = angular.module('app', ['ui.bootstrap', 'ngSanitize', 'ui.select']);
+      app.controller('mainCtrl', function($scope, $timeout) {
 
+         var vm = this;
+//         vm.show = true;
+
+         vm.itemArray = [
+            {id: 1, name: 'first'},
+            {id: 2, name: 'second'},
+            {id: 3, name: 'third'},
+            {id: 4, name: 'fourth'},
+            {id: 5, name: 'fifth'},
+         ];
+
+         //vm.selectedItem = vm.itemArray[0];
+         //vm.selectedItems = [vm.itemArray[0], vm.itemArray[4]];
+
+/*
+         $timeout(function() {
+            vm.show = false;
+            $('.one').css('left', '0');
+         }, 100)
+*/
+
+
+      })
+
+
+</script>
 </body>
 </html>
 

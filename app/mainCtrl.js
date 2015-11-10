@@ -1,23 +1,26 @@
 
 
 angular.module('app')
-.controller('mainCtrl', function($scope, prompt, notify) {
-      var vm = this;
+.controller('mainCtrl', function($scope, $timeout) {
 
-      vm.name = 'dank';
+   var vm = this;
+   vm.show = true;
 
-      vm.getFullName = function(val) {
-         return vm.name + ' ' + val;
-      }
+   vm.itemArray = [
+      {id: 1, name: 'first'},
+      {id: 2, name: 'second'},
+      {id: 3, name: 'third'},
+      {id: 4, name: 'fourth'},
+      {id: 5, name: 'fifth'},
+   ];
 
-      vm.click = function() {
+   //vm.selectedItem = vm.itemArray[0];
+   //vm.selectedItems = [vm.itemArray[0], vm.itemArray[4]];
 
-         notify({
-            message: 'my message',
-            duration: 5000
-         })
-
-      }
+   $timeout(function() {
+      vm.show = false;
+      $('.one').css('left', '0');
+   }, 100)
 
 
    })
