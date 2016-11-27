@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>bare</title>
+
+   <style>
+      .wrap {
+         width: calc(100% - 10%);
+         position: relative;
+         left: 5%
+      }
+      .one::shadow .two {
+         color: yellow;
+         background-color: blue;
+      }
+   </style>
+</head>
+<body>
+<div class="wrap">
+   <div class="one"></div>
+
+</div>
+
+<script>
+
+/*
+   var elem = document.querySelector('.one');
+   var root = elem.createShadowRoot();
+   root.innerHTML = "<style>.two {color: red;}</style><div class='two'>two</div>";
+   console.log(elem)
+*/
+
+var start = new Date();
+start.setTime(start.getTime() - 24 * 3600 * 1000 * 30);
+console.log(start);
+
+</script>
+
+</body>
+</html>

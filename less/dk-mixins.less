@@ -5,10 +5,10 @@
 //@import (reference) '../bower_components/font-awesome/less/font-awesome.less';
 
 .outline-offset(@n) { outline-offset: @n*(-1px);}
-.outline() {outline: 1px solid black; .outline-offset(1); }
+.outline {outline: 1px solid black; .outline-offset(1); }
 .outline2() { outline: 1px solid black; .outline-offset(2); }
-.outline-red() { .outline; outline-color: red; }
-.outline-blue() { .outline; outline-color: blue; }
+.outline-red { .outline; outline-color: red; }
+.outline-blue { .outline; outline-color: blue; }
 .outline-red2() { .outline2; outline-color: red;}
 .outline-blue2() { .outline2; outline-color: blue; }
 .bg-blue() { background: rgba(0,0,255, .1)};
@@ -46,6 +46,7 @@
 }
 
 .center-block() {
+   position: absolute;
    top: 50%;
    left: 50%;
    transform: translate(-50%, -50%);
@@ -68,4 +69,17 @@
       vertical-align: middle;
    }
 }
+
+.word-break {
+   word-break: break-all;
+}
+
+.text-ellipsis {
+   white-space: nowrap;
+   overflow: hidden;
+   text-overflow: ellipsis;
+}
+
+
+
 
